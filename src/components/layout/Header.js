@@ -2,10 +2,11 @@ import Link from "next/link";
 export default function Header() {
   return (
     <header className="flex items-center justify-between">
-      <Link className="text-primary font-bold" href="">
-        Al-Rehman Pizza
-      </Link>
-      <nav className="flex items-center gap-8 text-gray-500 font-semibold">
+      <nav className="flex items-center gap-5 text-gray-500 font-semibold">
+        <Link className="text-primary font-bold" href="">
+          Al-Rehman Pizza
+        </Link>
+
         <Link href={"/"} className="hover:text-primary">
           Home
         </Link>
@@ -18,11 +19,16 @@ export default function Header() {
         <Link href={"/"} className="hover:text-primary">
           Contact
         </Link>
+      </nav>
+      <nav className="flex items-center gap-4 text-gray-500 font-semibold">
+        <Link href={"/"} className="hover:text-primary">
+          Login
+        </Link>
         <Link
-          href={"/"}
+          href={"/register"}
           className="bg-primary px-8 py-2 text-white rounded-full"
         >
-          Login
+          Register
         </Link>
       </nav>
     </header>

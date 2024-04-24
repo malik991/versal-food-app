@@ -1,5 +1,5 @@
 import { MobileIcon } from "@/components/icons/Right";
-import Header from "@/components/layout/Header";
+
 import Hero from "@/components/layout/Hero";
 import HomeMenu from "@/components/layout/HomeMenu";
 import SectionHeaders from "@/components/layout/SectionHeaders";
@@ -7,7 +7,6 @@ import SectionHeaders from "@/components/layout/SectionHeaders";
 export default function Home() {
   return (
     <>
-      <Header />
       <Hero />
       <HomeMenu />
       <section className="text-center my-12">
@@ -47,19 +46,6 @@ export default function Home() {
           </a>
         </div>
       </section>
-      <footer className="border-t-2 p-8 text-center mt-8">
-        <span className="text-lg text-gray-500">
-          Made with 💖 by{" "}
-          <a
-            href="https://www.linkedin.com/in/mubashar-hassan-sci/"
-            target="_blank"
-            className="hover:underline text-primary"
-          >
-            Al-Rehman
-          </a>{" "}
-          © {new Date().getFullYear()}
-        </span>
-      </footer>
     </>
   );
 }
