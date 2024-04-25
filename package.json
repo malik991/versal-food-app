@@ -12,6 +12,7 @@
     "@auth/mongodb-adapter": "^3.0.0",
     "axios": "^1.6.8",
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.2.0",
     "mongodb": "^6.5.0",
     "mongoose": "^8.3.2",
     "next": "14.2.2",

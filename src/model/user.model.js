@@ -18,6 +18,9 @@ const UserSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    public_id: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
