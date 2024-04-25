@@ -3,8 +3,14 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import myDbConnection from "@/lib/myDbConnection";
 import UserModel from "@/model/user.model";
+import GoogleProvider from "next-auth/providers/google";
+import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import clientPromise from "@/lib/mongoConnect";
+import { Adapter } from "next-auth/adapters";
 
 export const authOptions: NextAuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
+  adapter: MongoDBAdapter(clientPromise) as Adapter,
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -44,8 +50,10 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
-    // add another provide like git hub
+    // add another provide like google
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
   ],
-
-  secret: process.env.NEXTAUTH_SECRET,
 };
