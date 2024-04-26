@@ -5,17 +5,17 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
-import { ErrorBox } from "@/components/layout/ErrroBox";
 import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const session = useSession();
   const [userName, setUsername] = useState("");
   const [userImage, setUserImage] = useState("");
-  const [error, setError] = useState(false);
-  const [btnDisabled, setbtnDisabled] = useState(false);
-
-  const [disableImagebtn, setDisableImagebtn] = useState(false);
+  const [mobile, setMobile] = useState("");
+  const [Street, setStreet] = useState("");
+  const [postCode, setPostCode] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
 
   //const userImage = session.data?.user?.image;
   const { status } = session;
@@ -24,6 +24,18 @@ export default function ProfilePage() {
     if (session.status === "authenticated") {
       setUsername(session.data?.user?.name);
       setUserImage(session.data?.user?.image);
+      axios
+        .get("/api/profile")
+        .then((response) => {
+          setMobile(response.data.mobile);
+          setStreet(response.data.Street);
+          setPostCode(response.data.postCode);
+          setCountry(response.data.country);
+          setCity(response.data.city);
+        })
+        .catch((error) => {
+          console.log("Error fetching profile data:", error);
+        });
     }
   }, [session, status]);
   if (status === "unauthenticated") {
@@ -35,12 +47,16 @@ export default function ProfilePage() {
 
   const handleProfileInfoupdate = async (ev) => {
     ev.preventDefault();
+
     try {
-      setError(false);
-      setbtnDisabled(true);
       const savingPromise = new Promise(async (resolve, reject) => {
         const response = await axios.put("/api/profile", {
           name: userName,
+          mobile,
+          Street,
+          postCode,
+          city,
+          country,
         });
         if (response.data.success === true) {
           resolve();
@@ -66,18 +82,12 @@ export default function ProfilePage() {
           },
         }
       );
-
-      setbtnDisabled(false);
     } catch (error) {
       console.log("errro in update profile infor: ", error);
-      setError(true);
-      setbtnDisabled(false);
     }
   };
 
   async function handleImageFile(ev) {
-    setError(false);
-    setDisableImagebtn(true);
     const getFiles = ev.target.files;
     if (getFiles?.length === 1) {
       const data = new FormData();
@@ -99,7 +109,7 @@ export default function ProfilePage() {
           savingPromise,
           {
             loading: "Avatar upLoading ...",
-            success: `Uploaded Successfully!`,
+            success: `Uploaded!, please refresh`,
             error: `Error, please try Again`,
           },
           {
@@ -112,12 +122,8 @@ export default function ProfilePage() {
             },
           }
         );
-
-        setDisableImagebtn(false);
       } catch (error) {
         console.log("error in uploading avatar: ", error);
-        setError(true);
-        setDisableImagebtn(false);
       }
     }
   }
@@ -126,8 +132,8 @@ export default function ProfilePage() {
     <section className="my-8">
       <h1 className="text-center text-primary text-4xl mb-4">Profile</h1>
       <div className="max-w-md mx-auto">
-        {error && <ErrorBox> Error, Try Again!</ErrorBox>}
-        <div className="flex gap-2 items-center mt-3">
+        {/* {error && <ErrorBox> Error, Try Again!</ErrorBox>} */}
+        <div className="flex gap-1">
           <div className="">
             <div className="p-2 rounded-lg relative max-w-[120px]">
               <Image
@@ -139,7 +145,6 @@ export default function ProfilePage() {
               />
               <label>
                 <input
-                  disabled={disableImagebtn}
                   type="file"
                   className="hidden"
                   onChange={handleImageFile}
@@ -148,28 +153,68 @@ export default function ProfilePage() {
                   className="block text-center p-2 border border-gray-300 
                 rounded-lg cursor-pointer hover:bg-primary"
                 >
-                  {disableImagebtn ? "Wait.." : "Update"}
+                  Update
                 </span>
               </label>
             </div>
           </div>
-
           <form className="grow" onSubmit={handleProfileInfoupdate}>
+            <label>Full Name</label>
             <input
               type="text"
               value={userName}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="first and last name"
             />
+            <label>Email</label>
             <input
               type="email"
               disabled={true}
               value={session.data?.user?.email}
               placeholder="first and last name"
             />
-            <button disabled={btnDisabled} type="submit">
-              {btnDisabled ? "please wait" : "Save"}
-            </button>
+            <label>Mobile</label>
+            <input
+              type="tel"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              placeholder="+123456"
+            />
+            <label>Street Address</label>
+            <input
+              type="text"
+              value={Street}
+              onChange={(e) => setStreet(e.target.value)}
+              placeholder="Street address"
+            />
+            <div className="flex gap-2">
+              <div>
+                <label>Postal Code</label>
+                <input
+                  type="text"
+                  value={postCode}
+                  onChange={(e) => setPostCode(e.target.value)}
+                  placeholder="Postal Code"
+                />
+              </div>
+              <div>
+                <label>City</label>
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  placeholder="City"
+                />
+              </div>
+            </div>
+            <label>Country</label>
+            <input
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              placeholder="Country"
+            />
+            <button type="submit">Save</button>
           </form>
         </div>
       </div>

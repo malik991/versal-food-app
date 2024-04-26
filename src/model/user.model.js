@@ -21,6 +21,21 @@ const UserSchema = new mongoose.Schema(
     public_id: {
       type: String,
     },
+    mobile: {
+      type: String,
+    },
+    Street: {
+      type: String,
+    },
+    postCode: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

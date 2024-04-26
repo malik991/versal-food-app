@@ -47,7 +47,7 @@ export const POST = async (req: NextRequest) => {
     );
     if (response) {
       return NextResponse.json(
-        { success: true, data: response, message: "uploaded success" },
+        { success: true, data: {}, message: "uploaded success" },
         { status: 200 }
       );
     } else {
