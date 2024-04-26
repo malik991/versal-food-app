@@ -6,6 +6,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import UserTabs from "../../components/layout/UserTabs";
 
 export default function ProfilePage() {
   const session = useSession();
@@ -16,6 +17,8 @@ export default function ProfilePage() {
   const [postCode, setPostCode] = useState("");
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [profileFetched, setProfileFetched] = useState(false);
 
   //const userImage = session.data?.user?.image;
   const { status } = session;
@@ -32,16 +35,19 @@ export default function ProfilePage() {
           setPostCode(response.data.postCode);
           setCountry(response.data.country);
           setCity(response.data.city);
+          setIsAdmin(response.data.IsAdmin);
+          setProfileFetched(true);
         })
         .catch((error) => {
           console.log("Error fetching profile data:", error);
         });
     }
   }, [session, status]);
+
   if (status === "unauthenticated") {
     return redirect("/login");
   }
-  if (status === "loading") {
+  if (status === "loading" || !profileFetched) {
     return "Loading...";
   }
 
@@ -130,8 +136,8 @@ export default function ProfilePage() {
 
   return (
     <section className="my-8">
-      <h1 className="text-center text-primary text-4xl mb-4">Profile</h1>
-      <div className="max-w-md mx-auto">
+      <UserTabs isAdmin={isAdmin} />
+      <div className="max-w-md mx-auto mt-6">
         {/* {error && <ErrorBox> Error, Try Again!</ErrorBox>} */}
         <div className="flex gap-1">
           <div className="">

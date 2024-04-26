@@ -39,6 +39,9 @@ export async function GET() {
   await myDbConnection();
   const session = await getServerSession(authOptions);
   // console.log(mobile);
-  const email = session.user?.email;
+  const email = session?.user?.email;
+  if (!email) {
+    return Response.json({});
+  }
   return Response.json(await UserModel.findOne({ email }));
 }

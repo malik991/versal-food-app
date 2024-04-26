@@ -36,6 +36,10 @@ const UserSchema = new mongoose.Schema(
     country: {
       type: String,
     },
+    IsAdmin: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
