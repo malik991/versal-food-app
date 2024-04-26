@@ -14,7 +14,6 @@ export async function PUT(req) {
       { new: true }
     );
     if (response) {
-      console.log("response", response);
       return Response.json({
         success: true,
         message: "record updated",

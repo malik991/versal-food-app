@@ -1,4 +1,4 @@
-import { UploadImage } from "@/lib/uploadCloudinary";
+import { UploadImage, DeleteCloudinaryImage } from "@/lib/uploadCloudinary";
 import { NextRequest, NextResponse } from "next/server";
 import myDbConnection from "@/lib/myDbConnection";
 import { getServerSession } from "next-auth";
@@ -10,6 +10,25 @@ export const POST = async (req: NextRequest) => {
     await myDbConnection();
     const getFile = await req.formData();
     const image = getFile.get("file") as unknown as File;
+    const session = await getServerSession(authOptions);
+    const email = session.user?.email;
+    const imageExist = await UserModel.findOne({ email });
+    if (imageExist?.public_id) {
+      console.log("yes present: ", imageExist?.public_id);
+      const deleteImageResponse: any = await DeleteCloudinaryImage([
+        imageExist.public_id,
+      ]);
+      if (!deleteImageResponse) {
+        return NextResponse.json(
+          {
+            success: false,
+            data: {},
+            message: "cloudinary delete image failed",
+          },
+          { status: 400 }
+        );
+      }
+    }
     const responseData: any = await UploadImage(image, "nextjs-pizza");
     if (!responseData) {
       return NextResponse.json(
@@ -17,8 +36,7 @@ export const POST = async (req: NextRequest) => {
         { status: 400 }
       );
     }
-    const session = await getServerSession(authOptions);
-    const email = session.user?.email;
+
     const response = await UserModel.findOneAndUpdate(
       { email },
       {
