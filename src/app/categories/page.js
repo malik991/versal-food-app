@@ -46,13 +46,18 @@ export default function CategoriesPage() {
 
   async function handleSubmitCategory(ev) {
     ev.preventDefault();
+    const data = { name: categoryname };
+    if (editedCategory) {
+      data._id = editedCategory._id;
+    }
     try {
       const savingPromise = new Promise(async (resolve, reject) => {
-        const response = await axios.post("/api/category", {
-          name: categoryname,
-        });
+        const response = editedCategory
+          ? await axios.put("/api/category", data)
+          : await axios.post("/api/category", data);
         fetchCategories();
         setCategoryname("");
+        setEditedCategory(null);
         if (response.data.success === true) {
           resolve();
         } else {
@@ -63,8 +68,10 @@ export default function CategoriesPage() {
       toast.promise(
         savingPromise,
         {
-          loading: "Creating your new category ...",
-          success: `category Created!`,
+          loading: editedCategory
+            ? "Updating category..."
+            : "Creating your new category ...",
+          success: editedCategory ? `category updated!` : `category Created!`,
           error: `Error, please try Again`,
         },
         {
@@ -90,19 +97,21 @@ export default function CategoriesPage() {
         <div className="flex items-end gap-2">
           <div className="grow">
             <label>
-              {editedCategory ? "Update Category" : "New Category Name"}
+              {editedCategory
+                ? `Update Category: ${editedCategory.name}`
+                : "New Category Name"}
             </label>
             <input
               type="text"
               placeholder="category name"
               name="category"
-              value={editedCategory ? editedCategory.name : categoryname}
+              value={categoryname}
               onChange={(ev) => setCategoryname(ev.target.value)}
             />
           </div>
           <div className="pb-2">
             <button type="submit">
-              {editedCategory ? "Update" : "Create"}
+              {editedCategory ? `Update` : "Create"}
             </button>
           </div>
         </div>
@@ -112,7 +121,10 @@ export default function CategoriesPage() {
         {fetchAllcategories?.length > 0 &&
           fetchAllcategories.map((category) => (
             <button
-              onClick={(e) => setEditedCategory(category)}
+              onClick={() => {
+                setEditedCategory(category);
+                setCategoryname(category.name);
+              }}
               className="bg-gray-200 rounded-xl p-2 px-4 flex gap-1 cursor-pointer mb-1"
             >
               <span>{category.name}</span>

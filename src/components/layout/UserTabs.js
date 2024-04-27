@@ -21,7 +21,7 @@ export default function UserTabs({ isAdmin }) {
             className={path === "/menu-items" ? "active" : ""}
             href={"/menu-items"}
           >
-            Items
+            Menu Items
           </Link>
           <Link className={path === "/users" ? "active" : ""} href={"/users"}>
             All Users
