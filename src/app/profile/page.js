@@ -2,11 +2,11 @@
 
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import UserTabs from "../../components/layout/UserTabs";
+import EditableImage from "@/components/layout/EditableImage";
 
 export default function ProfilePage() {
   const session = useSession();
@@ -53,7 +53,6 @@ export default function ProfilePage() {
 
   const handleProfileInfoupdate = async (ev) => {
     ev.preventDefault();
-
     try {
       const savingPromise = new Promise(async (resolve, reject) => {
         const response = await axios.put("/api/profile", {
@@ -70,7 +69,6 @@ export default function ProfilePage() {
           reject();
         }
       });
-
       toast.promise(
         savingPromise,
         {
@@ -93,77 +91,60 @@ export default function ProfilePage() {
     }
   };
 
-  async function handleImageFile(ev) {
-    const getFiles = ev.target.files;
-    if (getFiles?.length === 1) {
-      const data = new FormData();
-      data.set("file", getFiles[0]);
-      try {
-        const savingPromise = new Promise(async (resolve, reject) => {
-          const response = await axios.post("/api/uploadAvatar", data, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          });
-          if (response.data.success === true) {
-            resolve();
-          } else {
-            reject();
-          }
-        });
-        toast.promise(
-          savingPromise,
-          {
-            loading: "Avatar upLoading ...",
-            success: `Uploaded!, please refresh`,
-            error: `Error, please try Again`,
-          },
-          {
-            style: {
-              minWidth: "250px",
-            },
-            success: {
-              duration: 5000,
-              icon: "🔥",
-            },
-          }
-        );
-      } catch (error) {
-        console.log("error in uploading avatar: ", error);
-      }
-    }
-  }
+  // async function handleImageFile(ev) {
+  //   const getFiles = ev.target.files;
+  //   if (getFiles?.length === 1) {
+  //     const data = new FormData();
+  //     data.set("file", getFiles[0]);
+  //     try {
+  //       const savingPromise = new Promise(async (resolve, reject) => {
+  //         const response = await axios.post("/api/uploadAvatar", data, {
+  //           headers: {
+  //             "Content-Type": "multipart/form-data",
+  //           },
+  //         });
+  //         if (response.data.success === true) {
+  //           resolve();
+  //         } else {
+  //           reject();
+  //         }
+  //       });
+  //       toast.promise(
+  //         savingPromise,
+  //         {
+  //           loading: "Avatar upLoading ...",
+  //           success: `Uploaded!, please refresh`,
+  //           error: `Error, please try Again`,
+  //         },
+  //         {
+  //           style: {
+  //             minWidth: "250px",
+  //           },
+  //           success: {
+  //             duration: 5000,
+  //             icon: "🔥",
+  //           },
+  //         }
+  //       );
+  //     } catch (error) {
+  //       console.log("error in uploading avatar: ", error);
+  //     }
+  //   }
+  // }
 
   return (
     <section className="my-8">
       <UserTabs isAdmin={isAdmin} />
       <div className="max-w-md mx-auto mt-6">
         {/* {error && <ErrorBox> Error, Try Again!</ErrorBox>} */}
-        <div className="flex gap-1">
-          <div className="">
-            <div className="p-2 rounded-lg relative max-w-[120px]">
-              <Image
-                className="rounded-full w-full h-full mb-2"
-                src={userImage}
-                alt="avatar"
-                width={250}
-                height={250}
-              />
-              <label>
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={handleImageFile}
-                />
-                <span
-                  className="block text-center p-2 border border-gray-300 
-                rounded-lg cursor-pointer hover:bg-primary"
-                >
-                  Update
-                </span>
-              </label>
-            </div>
+        <div
+          className="grid items-start gap-3"
+          style={{ gridTemplateColumns: ".3fr .7fr" }}
+        >
+          <div>
+            <EditableImage userImage={userImage} />
           </div>
+
           <form className="grow" onSubmit={handleProfileInfoupdate}>
             <label>Full Name</label>
             <input
