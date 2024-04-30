@@ -2,7 +2,6 @@ import { UploadImage, DeleteCloudinaryImage } from "@/lib/uploadCloudinary";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
-import UserModel from "@/model/user.model";
 
 export const POST = async (req: NextRequest) => {
   try {

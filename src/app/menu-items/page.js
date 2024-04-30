@@ -3,70 +3,39 @@ import UserTabs from "@/components/layout/UserTabs";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { useProfile } from "@/components/MyHooks/UseProfile";
+import Link from "next/link";
+import Right from "@/components/icons/Right";
 import { useState, useEffect } from "react";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import toast from "react-hot-toast";
 import Image from "next/image";
-import EditableImage from "@/components/layout/EditableImage";
-import { resolve } from "path";
-import { rejects } from "assert";
 
 export default function MenuItemsPage() {
   const session = useSession();
   const { status } = session;
   const { loading: profileLoading, data: profileData } = useProfile();
-  const [image, setImage] = useState("");
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [basePrice, setBasePrice] = useState("");
+  const [menuItems, setMenuItems] = useState([]);
 
-  async function handleItemSubmit(ev) {
-    ev.preventDefault();
-    const result = axios.post("/api/menu-item", {
-      name,
-      description,
-      basePrice,
-      image,
-    });
-    toast.promise(
-      result,
-      {
-        loading: "Saving this tasty Item ...",
-        success: (res) => {
-          if (res?.data?.success === true) {
-            return "Menu Saved";
-          } else {
-            throw new Error(res?.data?.message);
-          }
-        },
-        error: (err) => {
-          if (
-            err.response &&
-            err.response.data &&
-            !err.response?.data?.message
-          ) {
-            return `Error: ${err.response.data.message}`;
-          } else if (err.message) {
-            return `please try again, ${err.message}`;
-          } else {
-            return "An error occurred while saving the menu item.";
-          }
-        },
-      },
-      {
-        style: {
-          minWidth: "250px",
-          border: "1px solid #713200",
-          padding: "16px",
-          color: "#713200",
-          position: "top-right",
-        },
-        success: {
-          duration: 5000,
-          icon: "🔥",
-        },
+  useEffect(() => {
+    console.log("use effect");
+
+    fetchAllMenu();
+  }, []);
+
+  async function fetchAllMenu() {
+    try {
+      const response = await axios.get("/api/menu-item");
+      if (response?.data?.success === true) {
+        //console.log("res: ", response.data?.data);
+        setMenuItems(response.data.data);
+      } else {
+        throw new Error(
+          response?.data?.message || "An error occurred while loading the menu."
+        );
       }
-    );
+    } catch (error) {
+      toast.error(`Error: ${error.message}`);
+    }
   }
 
   if (status === "unauthenticated") {
@@ -83,50 +52,39 @@ export default function MenuItemsPage() {
   }
 
   return (
-    <section className="mt-8">
+    <section className="mt-8 max-w-md mx-auto">
       <UserTabs isAdmin={true} />
-      <div className="max-w-md mx-auto mt-6">
-        <div
-          className="grid items-start gap-2"
-          style={{ gridTemplateColumns: ".3fr .7fr" }}
-        >
-          <div className="p-2 rounded-lg relative max-w-[120px]">
-            <EditableImage
-              link={image}
-              insertIntoDb={false}
-              setLink={setImage}
-            />
-          </div>
-          <form onSubmit={handleItemSubmit}>
-            <div className="flex gap-3 items-start">
-              <div className="grow">
-                <label>Item name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(ev) => setName(ev.target.value)}
-                  placeholder="new item name"
-                />
-                <label>Description</label>
-                <input
-                  type="text"
-                  value={description}
-                  onChange={(ev) => setDescription(ev.target.value)}
-                  placeholder="Description"
-                />
-                <label>Base price</label>
-                <input
-                  type="text"
-                  value={basePrice}
-                  onChange={(ev) => setBasePrice(ev.target.value)}
-                  placeholder="Base price"
-                />
-                <button type="submit" className="mt-3">
-                  Add
-                </button>
-              </div>
-            </div>
-          </form>
+      <div className="mt-8 ">
+        <Link className="button" href={"/menu-items/newItem"}>
+          Create New Item
+          <Right />
+        </Link>
+      </div>
+      <div>
+        <h2 className="text-sm text-gray-500 mt-8">Edit Menu Item:</h2>
+        <div className="grid grid-cols-3 gap-2">
+          {menuItems.length > 0 ? (
+            menuItems.map((item) => (
+              <Link
+                href={`/menu-items/edit/${item._id}`}
+                className="bg-gray-200 rounded-lg p-3 text-center
+                 hover:bg-white transition-all hover:shadow-md hover:shadow-black/30"
+              >
+                <div className="relative mb-1">
+                  <Image
+                    className="rounded-md"
+                    src={item.image}
+                    alt="menu-item"
+                    width={200}
+                    height={200}
+                  />
+                </div>
+                <div className="text-center">{item.name}</div>
+              </Link>
+            ))
+          ) : (
+            <div> no menu found</div>
+          )}
         </div>
       </div>
     </section>

@@ -1,5 +1,10 @@
-import mongoose, { mongo } from "mongoose";
-import { type } from "os";
+import mongoose from "mongoose";
+
+// schema for size and extringredients
+const extraPriceSchema = new mongoose.Schema({
+  name: String,
+  price: Number,
+});
 
 const MenuSchema = new mongoose.Schema(
   {
@@ -17,6 +22,8 @@ const MenuSchema = new mongoose.Schema(
       type: Number,
       required: [true, "price is mendatory"],
     },
+    sizes: { type: [extraPriceSchema] },
+    extraIngredients: { type: [extraPriceSchema] },
   },
   { timestamps: true }
 );
