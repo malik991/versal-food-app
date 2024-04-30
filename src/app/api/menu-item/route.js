@@ -7,7 +7,7 @@ import MenuModel from "@/model/menuItems.model";
 export async function POST(req) {
   try {
     const session = await getServerSession(authOptions);
-    const { name, description, basePrice } = await req.json();
+    const { name, description, basePrice, image } = await req.json();
     await myDbConnection();
 
     if (!name || !description || !basePrice) {
@@ -18,7 +18,12 @@ export async function POST(req) {
       });
     }
     if (session?.user?.email) {
-      const response = await MenuModel.create({ name, description, basePrice });
+      const response = await MenuModel.create({
+        name,
+        description,
+        basePrice,
+        image,
+      });
       if (response) {
         return Response.json({
           success: true,

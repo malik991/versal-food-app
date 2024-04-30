@@ -142,7 +142,7 @@ export default function ProfilePage() {
           style={{ gridTemplateColumns: ".3fr .7fr" }}
         >
           <div>
-            <EditableImage link={userImage} findRoute={"profile"} />
+            <EditableImage link={userImage} insertIntoDb={true} />
           </div>
 
           <form className="grow" onSubmit={handleProfileInfoupdate}>

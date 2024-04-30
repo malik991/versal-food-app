@@ -2,34 +2,26 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function EditableImage({ link, findRoute, setLink }) {
+export default function EditableImage({ link, insertIntoDb, setLink }) {
   async function handleImageFile(ev) {
     const getFiles = ev.target.files;
     if (getFiles?.length === 1) {
       const data = new FormData();
       data.set("file", getFiles[0]);
-      // try {
-      // const savingPromise = new Promise(async (resolve, reject) => {
       let response;
-      if (findRoute === "profile") {
+      if (insertIntoDb) {
         response = axios.post("/api/uploadAvatar", data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-      } else if (findRoute === "item") {
-        response = axios.post("/api/menu-item-pic", data, {
+      } else {
+        response = axios.post("/api/image-upload", data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
       }
-      // if (response?.data?.success === true) {
-      //   setLink(response.data.imageURL);
-      //   //toast.success("Image uploaded successfully!");
-      // } else {
-      //   throw new Error("Something went wrong");
-      // }
 
       toast.promise(
         response,
@@ -38,7 +30,9 @@ export default function EditableImage({ link, findRoute, setLink }) {
           success: (res) => {
             console.log("res: ", res);
             if (res.data.success === true) {
-              setLink(res.data.imageURL);
+              if (!insertIntoDb) {
+                setLink(res.data?.data?.image);
+              }
               return "Uploaded!, please Refresh";
             } else {
               throw new Error("image not ");
@@ -59,10 +53,6 @@ export default function EditableImage({ link, findRoute, setLink }) {
           },
         }
       );
-      // } catch (error) {
-      //   console.log("error in uploading avatar: ", error);
-      //   toast.error("Error uploading image, please try again");
-      // }
     }
   }
 

@@ -20,26 +20,13 @@ export default function MenuItemsPage() {
   const [description, setDescription] = useState("");
   const [basePrice, setBasePrice] = useState("");
 
-  // useEffect(() => {
-  //   if (status === "authenticated") {
-  //     axios
-  //       .get("/api/menu-item-pic")
-  //       .then((response) => {
-  //         setmenueImage(response?.data?.data?.image);
-  //       })
-  //       .catch((err) => {
-  //         console.log("Error fetching menue item data:", err);
-  //       });
-  //   }
-  // }, [session, status]);
-
   async function handleItemSubmit(ev) {
     ev.preventDefault();
-    console.log("name: ", name, " ImageURL: ", image);
     const result = axios.post("/api/menu-item", {
       name,
       description,
       basePrice,
+      image,
     });
     toast.promise(
       result,
@@ -104,7 +91,11 @@ export default function MenuItemsPage() {
           style={{ gridTemplateColumns: ".3fr .7fr" }}
         >
           <div className="p-2 rounded-lg relative max-w-[120px]">
-            <EditableImage link={image} findRoute={"item"} setLink={setImage} />
+            <EditableImage
+              link={image}
+              insertIntoDb={false}
+              setLink={setImage}
+            />
           </div>
           <form onSubmit={handleItemSubmit}>
             <div className="flex gap-3 items-start">
