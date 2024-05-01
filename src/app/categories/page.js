@@ -6,6 +6,8 @@ import { useProfile } from "@/components/MyHooks/UseProfile";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { AddIcon, EditIcon, Trash } from "@/components/icons/Right";
+import DeleteButton from "@/components/layout/DeleteButton";
 
 export default function CategoriesPage() {
   const session = useSession();
@@ -79,7 +81,7 @@ export default function CategoriesPage() {
             minWidth: "250px",
           },
           success: {
-            duration: 5000,
+            duration: 3000,
             icon: "🔥",
           },
         }
@@ -88,6 +90,59 @@ export default function CategoriesPage() {
       console.log("errro in add new category: ", error);
     }
   }
+
+  async function handleDeleteCategory(idToDelete) {
+    //ev.preventDefault();
+    if (!idToDelete) {
+      toast.error("Item Id not found");
+      return;
+    }
+    const response = axios.delete(`/api/category/${idToDelete}`);
+    toast.promise(
+      response,
+      {
+        loading: "Deleting this item ...",
+        success: (res) => {
+          if (res?.data?.success === true) {
+            fetchCategories();
+            return "Item Deleted Successfully!";
+          } else {
+            throw new Error(res?.data?.message);
+          }
+        },
+        error: (err) => {
+          if (
+            err.response &&
+            err.response.data &&
+            !err.response?.data?.message
+          ) {
+            return `Error: ${err.response.data.message}`;
+          } else if (err.message) {
+            return `please try again, ${err.message}`;
+          } else {
+            return "An error occurred while saving the menu item.";
+          }
+        },
+      },
+      {
+        style: {
+          minWidth: "250px",
+          border: "1px solid #713200",
+          padding: "16px",
+          color: "#713200",
+          position: "top-right",
+        },
+        success: {
+          duration: 3000,
+          icon: "🔥",
+        },
+      }
+    );
+  }
+
+  // if (redirectToMainMenu) {
+  //   route.replace("/categories");
+  // }
 
   return (
     <section className="mt-8 max-w-md mx-auto ">
@@ -109,26 +164,46 @@ export default function CategoriesPage() {
               onChange={(ev) => setCategoryname(ev.target.value)}
             />
           </div>
-          <div className="pb-2">
-            <button type="submit">
+          <div className="flex gap-1 pb-2">
+            <button type="submit" className="text-sm items-center">
+              <AddIcon />
               {editedCategory ? `Update` : "Create"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditedCategory(null);
+                setCategoryname("");
+              }}
+            >
+              Cancel
             </button>
           </div>
         </div>
       </form>
       <div>
-        <h2 className="text-sm text-gray-500 mt-6">Edit Category</h2>
+        <h2 className="text-sm text-gray-500 mt-6">Existing Categories</h2>
         {fetchAllcategories?.length > 0 &&
           fetchAllcategories.map((category) => (
-            <button
-              onClick={() => {
-                setEditedCategory(category);
-                setCategoryname(category.name);
-              }}
-              className="rounded-xl p-2 px-4 flex gap-1 cursor-pointer mb-1"
-            >
-              <span>{category.name}</span>
-            </button>
+            <div className="rounded-xl bg-gray-200 p-2 px-4 flex gap-1 mb-1 items-center">
+              <span className="grow">{category.name}</span>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => {
+                    setEditedCategory(category);
+                    setCategoryname(category.name);
+                  }}
+                >
+                  <span className="text-sm">Edit</span>
+                  <EditIcon className="w-5 h-5" />
+                </button>
+
+                <DeleteButton
+                  btnLabel={"Delete"}
+                  onDelete={() => handleDeleteCategory(category._id)}
+                />
+              </div>
+            </div>
           ))}
       </div>
     </section>

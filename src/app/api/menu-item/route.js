@@ -103,3 +103,35 @@ export async function PUT(req) {
     throw error;
   }
 }
+
+export async function DELETE(req) {
+  //get qery from url
+  const url = new URL(req.url);
+  const _id = url.searchParams.get("_id");
+  try {
+    if (!_id) {
+      return Response.json({
+        success: false,
+        message: "Deleted item failed",
+        data: {},
+      });
+    }
+    await myDbConnection();
+    const result = await MenuModel.findOneAndDelete({ _id });
+    if (!result) {
+      return Response.json({
+        success: false,
+        message: "Item ID Not found for deleted",
+        data: {},
+      });
+    }
+    return Response.json({
+      success: true,
+      message: "Deleted item successfully",
+      data: { result },
+    });
+  } catch (error) {
+    console.log("error while delteing menu item APi: ", error);
+    throw error;
+  }
+}

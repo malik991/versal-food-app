@@ -1,6 +1,5 @@
 import myDbConnection from "@/lib/myDbConnection";
 import { Category } from "@/model/categories.model";
-import mongoose from "mongoose";
 
 export async function POST(req) {
   const { name } = await req.json();
@@ -37,7 +36,6 @@ export async function GET() {
 
 export async function PUT(req) {
   const data = await req.json();
-  console.log(data);
   if (!data) {
     return Response.json({ success: false, error: "No data provided" });
   }

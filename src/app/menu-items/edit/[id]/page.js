@@ -10,6 +10,7 @@ import Link from "next/link";
 import { LeftRoundedArow } from "@/components/icons/Right";
 import { useParams, useRouter } from "next/navigation";
 import MenuItemForm from "@/components/layout/MenuItemForm";
+import DeleteButton from "@/components/layout/DeleteButton";
 
 export default function EditMenuItemPage() {
   const { id } = useParams();
@@ -86,6 +87,51 @@ export default function EditMenuItemPage() {
     );
   }
 
+  async function handleDeleteAction() {
+    //ev.preventDefault();
+    const result = axios.delete("/api/menu-item?_id=" + id);
+    toast.promise(
+      result,
+      {
+        loading: "Deleting Item ...",
+        success: (res) => {
+          if (res?.data?.success === true) {
+            setRedirectToMaainMenu(true);
+            return "Item deleted";
+          } else {
+            throw new Error(res?.data?.message);
+          }
+        },
+        error: (err) => {
+          if (
+            err.response &&
+            err.response.data &&
+            !err.response?.data?.message
+          ) {
+            return `Error: ${err.response.data.message}`;
+          } else if (err.message) {
+            return `please try again, ${err.message}`;
+          } else {
+            return "An error occurred while saving the menu item.";
+          }
+        },
+      },
+      {
+        style: {
+          minWidth: "250px",
+          border: "1px solid #713200",
+          padding: "16px",
+          color: "#713200",
+          position: "top-right",
+        },
+        success: {
+          duration: 5000,
+          icon: "🔥",
+        },
+      }
+    );
+  }
+
   if (redirectToMainMenu) {
     route.replace("/menu-items");
   }
@@ -101,6 +147,18 @@ export default function EditMenuItemPage() {
       </div>
       <div className="max-w-md mx-auto mt-8">
         <MenuItemForm onSubmit={handleItemSubmit} menuItem={menuItems} />
+        <div
+          className="grid items-start gap-2 mt-2"
+          style={{ gridTemplateColumns: ".3fr .7fr" }}
+        >
+          <div></div>
+          <div>
+            <DeleteButton btnLabel={"Delete"} onDelete={handleDeleteAction} />
+            {/* <button type="button" onClick={handleDeleteAction}>
+              Delete
+            </button> */}
+          </div>
+        </div>
       </div>
     </section>
   );
