@@ -52,41 +52,43 @@ export default function MenuItemsPage() {
   }
 
   return (
-    <section className="mt-8 max-w-md mx-auto">
+    <section className="mt-8">
       <UserTabs isAdmin={true} />
-      <div className="mt-8 ">
-        <Link className="button" href={"/menu-items/newItem"}>
-          Create New Item
-          <Right />
-        </Link>
-      </div>
-      <div>
-        <h2 className="text-sm text-gray-500 mt-8">Edit Menu Item:</h2>
-        <div className="grid grid-cols-3 gap-2">
-          {menuItems.length > 0 ? (
-            menuItems.map((item) => (
-              <Link
-                key={item._id}
-                href={`/menu-items/edit/${item._id}`}
-                className="bg-gray-200 rounded-lg p-3 text-center
+      <div className=" mt-8 max-w-md mx-auto">
+        <div className="mt-8 ">
+          <Link className="button" href={"/menu-items/newItem"}>
+            Create New Item
+            <Right />
+          </Link>
+        </div>
+        <div>
+          <h2 className="text-sm text-gray-500 mt-8">Edit Menu Item:</h2>
+          <div className="grid grid-cols-3 gap-2">
+            {menuItems.length > 0 ? (
+              menuItems.map((item) => (
+                <Link
+                  key={item._id}
+                  href={`/menu-items/edit/${item._id}`}
+                  className="bg-gray-200 rounded-lg p-3 text-center
                  hover:bg-white transition-all hover:shadow-md hover:shadow-black/30"
-              >
-                <div className="relative mb-1">
-                  <Image
-                    className="rounded-md"
-                    src={item.image}
-                    alt="menu-item"
-                    width={200}
-                    height={200}
-                    priority={true}
-                  />
-                </div>
-                <div className="text-center">{item.name}</div>
-              </Link>
-            ))
-          ) : (
-            <div> no menu found</div>
-          )}
+                >
+                  <div className="relative mb-1">
+                    <Image
+                      className="rounded-md"
+                      src={item.image}
+                      alt="menu-item"
+                      width={200}
+                      height={200}
+                      priority={true}
+                    />
+                  </div>
+                  <div className="text-center">{item.name}</div>
+                </Link>
+              ))
+            ) : (
+              <div> no menu found</div>
+            )}
+          </div>
         </div>
       </div>
     </section>

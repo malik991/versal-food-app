@@ -162,74 +162,72 @@ export default function CategoriesPage() {
     );
   }
 
-  // if (redirectToMainMenu) {
-  //   route.replace("/categories");
-  // }
-
   return (
-    <section className="mt-8 max-w-md mx-auto ">
+    <section className="mt-8">
       <UserTabs isAdmin={true} />
 
-      <form className="mt-4" onSubmit={handleSubmitCategory}>
-        <div className="flex items-end gap-2">
-          <div className="grow">
-            <label>
-              {editedCategory
-                ? `Update Category: ${editedCategory.name}`
-                : "New Category Name"}
-            </label>
-            <input
-              type="text"
-              placeholder="category name"
-              name="category"
-              value={categoryname}
-              onChange={(ev) => setCategoryname(ev.target.value)}
-            />
-          </div>
-          <div className="flex gap-1 pb-2">
-            <button type="submit" className="text-sm items-center">
-              <AddIcon />
-              {editedCategory ? `Update` : "Create"}
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                setEditedCategory(null);
-                setCategoryname("");
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </form>
-      <div>
-        <h2 className="text-sm text-gray-500 mt-6">Existing Categories</h2>
-        {fetchAllcategories?.length > 0 &&
-          fetchAllcategories.map((category) => (
-            <div
-              key={category._id}
-              className="rounded-xl bg-gray-200 p-2 px-4 flex gap-1 mb-1 items-center"
-            >
-              <span className="grow">{category.name}</span>
-              <div className="flex gap-1">
-                <button
-                  onClick={() => {
-                    setEditedCategory(category);
-                    setCategoryname(category.name);
-                  }}
-                >
-                  <span className="text-sm">Edit</span>
-                  <EditIcon className="w-5 h-5" />
-                </button>
-
-                <DeleteButton
-                  btnLabel={"Delete"}
-                  onDelete={() => handleDeleteCategory(category._id)}
-                />
-              </div>
+      <div className="mt-8 max-w-md mx-auto ">
+        <form className="mt-4" onSubmit={handleSubmitCategory}>
+          <div className="flex items-end gap-2">
+            <div className="grow">
+              <label>
+                {editedCategory
+                  ? `Update Category: ${editedCategory.name}`
+                  : "New Category Name"}
+              </label>
+              <input
+                type="text"
+                placeholder="category name"
+                name="category"
+                value={categoryname}
+                onChange={(ev) => setCategoryname(ev.target.value)}
+              />
             </div>
-          ))}
+            <div className="flex gap-1 pb-2">
+              <button type="submit" className="text-sm items-center">
+                <AddIcon />
+                {editedCategory ? `Update` : "Create"}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setEditedCategory(null);
+                  setCategoryname("");
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+        <div>
+          <h2 className="text-sm text-gray-500 mt-6">Existing Categories</h2>
+          {fetchAllcategories?.length > 0 &&
+            fetchAllcategories.map((category) => (
+              <div
+                key={category._id}
+                className="rounded-xl bg-gray-200 p-2 px-4 flex gap-1 mb-1 items-center"
+              >
+                <span className="grow">{category.name}</span>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => {
+                      setEditedCategory(category);
+                      setCategoryname(category.name);
+                    }}
+                  >
+                    <span className="text-sm">Edit</span>
+                    <EditIcon className="w-5 h-5" />
+                  </button>
+
+                  <DeleteButton
+                    btnLabel={"Delete"}
+                    onDelete={() => handleDeleteCategory(category._id)}
+                  />
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
     </section>
   );

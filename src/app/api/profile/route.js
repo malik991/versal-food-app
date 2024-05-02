@@ -5,12 +5,29 @@ import UserModel from "@/model/user.model";
 export async function PUT(req) {
   try {
     await myDbConnection();
-    const { name, mobile, Street, postCode, city, country } = await req.json();
+    const { data } = await req.json();
+    if (!data.name) {
+      return Response.json({
+        success: false,
+        message: "name is mendatory",
+        data: {},
+      });
+    }
     const session = await getServerSession(authOptions);
     const email = session.user?.email;
+    console.log("email is: ", email);
     const response = await UserModel.findOneAndUpdate(
       { email },
-      { name, mobile, Street, postCode, city, country },
+      {
+        $set: {
+          name: data.name,
+          mobile: data.mobile,
+          Street: data.Street,
+          postCode: data.postCode,
+          city: data.city,
+          country: data.country,
+        },
+      },
       { new: true }
     );
     if (response) {
@@ -35,13 +52,22 @@ export async function PUT(req) {
   }
 }
 
-export async function GET() {
+export async function GET(req) {
   await myDbConnection();
-  const session = await getServerSession(authOptions);
-  // console.log(mobile);
-  const email = session?.user?.email;
-  if (!email) {
-    return Response.json({});
+  const url = new URL(req.url);
+  const _id = url.searchParams.get("id");
+  if (_id) {
+    return Response.json({
+      success: true,
+      data: await UserModel.findOne({ _id }).select("-password"),
+    });
+  } else {
+    const session = await getServerSession(authOptions);
+    // console.log(mobile);
+    const email = session?.user?.email;
+    if (!email) {
+      return Response.json({});
+    }
+    return Response.json(await UserModel.findOne({ email }));
   }
-  return Response.json(await UserModel.findOne({ email }));
 }
