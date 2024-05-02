@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditableImage from "@/components/layout/EditableImage";
 import MenuItemPriceProp from "@/components/layout/MenuItemPriceProp";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function MenuItemForm({ onSubmit, menuItem }) {
   const [image, setImage] = useState(menuItem?.image || "");
@@ -8,9 +10,26 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
   const [description, setDescription] = useState(menuItem?.description || "");
   const [basePrice, setBasePrice] = useState(menuItem?.basePrice || "");
   const [sizes, setSizes] = useState(menuItem?.sizes || []);
+  const [category, setCategory] = useState(menuItem?.category || "");
+  const [allCategories, setAllCategories] = useState([]);
+  const [isCategorySelected, setIsCategorySelected] = useState(false);
   const [extraIngredients, setExtraIngredients] = useState(
     menuItem?.extraIngredients || []
   );
+
+  useEffect(() => {
+    axios
+      .get("/api/category")
+      .then((response) => {
+        if (response) {
+          setAllCategories(response?.data);
+        }
+      })
+      .catch((err) => {
+        console.log("error while fetching categories in menuFOrm: ", err);
+        toast.error("Error while fetching categories");
+      });
+  }, []);
 
   return (
     <div
@@ -29,6 +48,7 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
             image,
             sizes,
             extraIngredients,
+            category,
           })
         }
       >
@@ -48,6 +68,26 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
               onChange={(ev) => setDescription(ev.target.value)}
               placeholder="Description"
             />
+            <label>Category</label>
+            <select
+              value={category}
+              onChange={(ev) => {
+                setCategory(ev.target.value);
+                setIsCategorySelected(true);
+              }}
+            >
+              {!isCategorySelected && (
+                <option value="" disabled>
+                  Please select a category
+                </option>
+              )}
+              {allCategories.length > 0 &&
+                allCategories.map((c) => (
+                  <option key={c._id} value={c._id}>
+                    {c.name}
+                  </option>
+                ))}
+            </select>
             <label>Base price</label>
             <input
               type="text"
