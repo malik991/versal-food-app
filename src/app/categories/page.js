@@ -14,11 +14,13 @@ export default function CategoriesPage() {
   const { status } = session;
   const { loading: profileLoading, data: profileData } = useProfile();
   const [categoryname, setCategoryname] = useState("");
-  const [fetchAllcategories, setFetchAllcategories] = useState();
+  const [fetchAllcategories, setFetchAllcategories] = useState([]);
+  const [meneItems, setMenuItems] = useState([]);
   const [editedCategory, setEditedCategory] = useState(null);
 
   useEffect(() => {
     fetchCategories();
+    fetchMenuItems();
   }, []);
 
   function fetchCategories() {
@@ -31,6 +33,19 @@ export default function CategoriesPage() {
       .catch((error) => {
         console.log("error in useffect to fetch all categories", error);
       });
+  }
+
+  async function fetchMenuItems() {
+    try {
+      const response = await axios.get("/api/menu-item");
+      if (response.data.success === true) {
+        console.log(response.data?.data);
+        setMenuItems(response.data?.data);
+      }
+    } catch (error) {
+      console.log("error while fetching menue data in category: ", error);
+      toast.error("Error fetching menu items");
+    }
   }
 
   if (status === "unauthenticated") {
@@ -95,6 +110,13 @@ export default function CategoriesPage() {
     //ev.preventDefault();
     if (!idToDelete) {
       toast.error("Item Id not found");
+      return;
+    }
+
+    const isUsed = meneItems.some((item) => item?.category === idToDelete);
+    if (isUsed) {
+      console.log(" idtoDelet: ", idToDelete);
+      toast.error("this category is in used of a menue Item");
       return;
     }
     const response = axios.delete(`/api/category/${idToDelete}`);
@@ -185,7 +207,10 @@ export default function CategoriesPage() {
         <h2 className="text-sm text-gray-500 mt-6">Existing Categories</h2>
         {fetchAllcategories?.length > 0 &&
           fetchAllcategories.map((category) => (
-            <div className="rounded-xl bg-gray-200 p-2 px-4 flex gap-1 mb-1 items-center">
+            <div
+              key={category._id}
+              className="rounded-xl bg-gray-200 p-2 px-4 flex gap-1 mb-1 items-center"
+            >
               <span className="grow">{category.name}</span>
               <div className="flex gap-1">
                 <button

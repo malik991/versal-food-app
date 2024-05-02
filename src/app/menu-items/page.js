@@ -66,6 +66,7 @@ export default function MenuItemsPage() {
           {menuItems.length > 0 ? (
             menuItems.map((item) => (
               <Link
+                key={item._id}
                 href={`/menu-items/edit/${item._id}`}
                 className="bg-gray-200 rounded-lg p-3 text-center
                  hover:bg-white transition-all hover:shadow-md hover:shadow-black/30"
@@ -77,6 +78,7 @@ export default function MenuItemsPage() {
                     alt="menu-item"
                     width={200}
                     height={200}
+                    priority={true}
                   />
                 </div>
                 <div className="text-center">{item.name}</div>
