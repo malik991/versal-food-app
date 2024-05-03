@@ -1,4 +1,11 @@
-export default function MenuItem({ name, price, description }) {
+export default function MenuItem({
+  name,
+  basePrice,
+  description,
+  image,
+  sizes,
+  extraIngredients,
+}) {
   return (
     <div
       className="bg-gray-200 rounded-lg p-3 text-center
@@ -6,7 +13,7 @@ export default function MenuItem({ name, price, description }) {
     >
       <div className="text-center">
         <img
-          src={"/pizza.png"}
+          src={image ? image : "/pizza.png"}
           alt="pizza"
           className="max-h-auto max-h-24 block mx-auto"
         />
@@ -14,14 +21,14 @@ export default function MenuItem({ name, price, description }) {
       <h4 className="font-semibold text-xl my-2">
         {name ? name : "Pepproni Pizza"}
       </h4>
-      <p className="text-gray-500 text-sm">
+      <p className="text-gray-500 text-sm line-clamp-3">
         {description
           ? description
           : `It is a long established fact that a reader will be distracted by the
         readable content of a page when looking at its layout`}
       </p>
       <button className="bg-primary mt-2 rounded-full px-8 py-2 hover:bg-gray-300">
-        add to cart {price ? `$${price}` : "$12"}
+        add to Cart {basePrice ? `$${basePrice}` : "$0"}
       </button>
     </div>
   );

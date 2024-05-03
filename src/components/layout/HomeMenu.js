@@ -1,8 +1,20 @@
+"use client";
 import Image from "next/image";
 import MenuItem from "../menu/MenuItem";
 import SectionHeaders from "./SectionHeaders";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function HomeMenu() {
+  const [bestSellers, setBestSellers] = useState([]);
+  useEffect(() => {
+    axios.get("/api/menu-item").then((res) => {
+      if (res.data) {
+        setBestSellers(res.data.data.slice(0, 3));
+      }
+    });
+  }, []);
+
   return (
     <section className="">
       <div className="absolute left-0 right-0 w-full justify-start">
@@ -14,20 +26,11 @@ export default function HomeMenu() {
         </div>
       </div>
       <div className="text-center">
-        <SectionHeaders header={"Menu"} subHeader={"check out"} />
+        <SectionHeaders header={"Our Best Sellers"} subHeader={"check out"} />
       </div>
       <div className="grid grid-cols-3 gap-4 mt-3">
-        <MenuItem
-          name="Tikka"
-          price="04"
-          description="It is a long established fact that a reader will be distracted by the
-        readable content of a page when looking at its layout"
-        />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
-        <MenuItem />
+        {bestSellers.length > 0 &&
+          bestSellers.map((item) => <MenuItem {...item} />)}
       </div>
     </section>
   );

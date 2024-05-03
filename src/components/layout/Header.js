@@ -18,13 +18,13 @@ export default function Header() {
         <Link href={"/"} className="hover:text-primary">
           Home
         </Link>
-        <Link href={"/"} className="hover:text-primary">
+        <Link href={"/menu"} className="hover:text-primary">
           Menu
         </Link>
-        <Link href={"/"} className="hover:text-primary">
+        <Link href={"/#about"} className="hover:text-primary">
           About
         </Link>
-        <Link href={"/"} className="hover:text-primary">
+        <Link href={"/#contact"} className="hover:text-primary">
           Contact
         </Link>
       </nav>
