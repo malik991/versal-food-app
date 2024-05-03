@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UserForm from "@/components/layout/userForm";
 import toast from "react-hot-toast";
+import Link from "next/link";
+import { LeftRoundedArow } from "@/components/icons/Right";
 
 export default function userPage() {
   const { loading, data } = useProfile();
@@ -34,7 +36,6 @@ export default function userPage() {
   }
 
   async function handleSaveData(ev, data) {
-    console.log(data);
     ev.preventDefault();
     if (!data.name) {
       toast.error("name is mendatory");
@@ -45,6 +46,7 @@ export default function userPage() {
       const savingPromise = new Promise(async (resolve, reject) => {
         const response = await axios.put("/api/profile", {
           data,
+          id,
         });
         if (response.data.success === true) {
           resolve();
@@ -78,8 +80,18 @@ export default function userPage() {
     <section className="mt-8">
       <div className="max-w-xl mx-auto mt-8">
         <UserTabs isAdmin={true} />
+        <div className="mt-8 max-w-sm mx-auto">
+          <Link href={"/users"} className="button">
+            <LeftRoundedArow />
+            All Users
+          </Link>
+        </div>
         <div className="mt-8">
-          <UserForm user={userData} onSave={handleSaveData} />
+          <UserForm
+            user={userData}
+            onSave={handleSaveData}
+            userIdIfExist={id}
+          />
         </div>
       </div>
     </section>

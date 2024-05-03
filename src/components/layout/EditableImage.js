@@ -2,15 +2,23 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function EditableImage({ link, insertIntoDb, setLink }) {
+export default function EditableImage({
+  link,
+  insertIntoDb,
+  setLink,
+  userIDforAvatar,
+}) {
   async function handleImageFile(ev) {
     const getFiles = ev.target.files;
     if (getFiles?.length === 1) {
       const data = new FormData();
       data.set("file", getFiles[0]);
+      if (userIDforAvatar) {
+        data.set("_id", userIDforAvatar);
+      }
       let response;
       if (insertIntoDb) {
-        response = axios.post("/api/uploadAvatar", data, {
+        response = axios.post(`/api/uploadAvatar`, data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

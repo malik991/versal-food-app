@@ -44,11 +44,7 @@ export default function Users() {
                   <span>{user.email}</span>
                 </div>
                 <div>
-                  <Link
-                    className="button"
-                    href={"/users/" + user._id}
-                    target="_blank"
-                  >
+                  <Link className="button" href={"/users/" + user._id}>
                     Edit
                   </Link>
                 </div>

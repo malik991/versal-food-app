@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import EditableImage from "@/components/layout/EditableImage";
-export default function UserForm({ user, onSave }) {
+
+export default function UserForm({ user, onSave, userIdIfExist }) {
   const [userName, setUsername] = useState(user?.name || "");
   const [userImage, setUserImage] = useState(user?.image || "");
   const [mobile, setMobile] = useState(user?.mobile || "");
@@ -16,7 +17,11 @@ export default function UserForm({ user, onSave }) {
       style={{ gridTemplateColumns: ".3fr .7fr" }}
     >
       <div>
-        <EditableImage link={userImage} insertIntoDb={true} />
+        <EditableImage
+          link={userImage}
+          insertIntoDb={true}
+          userIDforAvatar={userIdIfExist}
+        />
       </div>
 
       <form

@@ -8,11 +8,23 @@ import UserModel from "@/model/user.model";
 export const POST = async (req: NextRequest) => {
   try {
     await myDbConnection();
-    const getFile = await req.formData();
-    const image = getFile.get("file") as unknown as File;
+    const data = await req.formData();
+    const _id = data?.get("_id");
+
+    const image = data.get("file") as unknown as File;
+
     const session = await getServerSession(authOptions);
     const email = session.user?.email;
-    const imageExist = await UserModel.findOne({ email });
+    let imageExist: any;
+    let response: any;
+    if (_id) {
+      console.log("enter for Id");
+
+      imageExist = await UserModel.findOne({ _id });
+    } else {
+      imageExist = await UserModel.findOne({ email });
+    }
+
     if (imageExist?.public_id) {
       console.log("yes present: ", imageExist?.public_id);
       const deleteImageResponse: any = await DeleteCloudinaryImage([
@@ -36,15 +48,26 @@ export const POST = async (req: NextRequest) => {
         { status: 400 }
       );
     }
+    if (_id) {
+      response = await UserModel.findOneAndUpdate(
+        { _id },
+        {
+          image: responseData?.secure_url || "",
+          public_id: responseData?.public_id || "",
+        },
+        { new: true }
+      );
+    } else {
+      response = await UserModel.findOneAndUpdate(
+        { email },
+        {
+          image: responseData?.secure_url || "",
+          public_id: responseData?.public_id || "",
+        },
+        { new: true }
+      );
+    }
 
-    const response = await UserModel.findOneAndUpdate(
-      { email },
-      {
-        image: responseData?.secure_url || "",
-        public_id: responseData?.public_id || "",
-      },
-      { new: true }
-    );
     if (response) {
       return NextResponse.json(
         { success: true, data: {}, message: "uploaded success" },

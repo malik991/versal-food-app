@@ -5,7 +5,7 @@ import UserModel from "@/model/user.model";
 export async function PUT(req) {
   try {
     await myDbConnection();
-    const { data } = await req.json();
+    const { id, data } = await req.json();
     if (!data.name) {
       return Response.json({
         success: false,
@@ -15,21 +15,40 @@ export async function PUT(req) {
     }
     const session = await getServerSession(authOptions);
     const email = session.user?.email;
-    console.log("email is: ", email);
-    const response = await UserModel.findOneAndUpdate(
-      { email },
-      {
-        $set: {
-          name: data.name,
-          mobile: data.mobile,
-          Street: data.Street,
-          postCode: data.postCode,
-          city: data.city,
-          country: data.country,
+    let response;
+    console.log("Id is: ", id);
+    if (id) {
+      response = await UserModel.findOneAndUpdate(
+        { _id: id },
+        {
+          $set: {
+            name: data.name,
+            mobile: data.mobile,
+            Street: data.Street,
+            postCode: data.postCode,
+            city: data.city,
+            country: data.country,
+          },
         },
-      },
-      { new: true }
-    );
+        { new: true }
+      );
+    } else {
+      response = await UserModel.findOneAndUpdate(
+        { email },
+        {
+          $set: {
+            name: data.name,
+            mobile: data.mobile,
+            Street: data.Street,
+            postCode: data.postCode,
+            city: data.city,
+            country: data.country,
+          },
+        },
+        { new: true }
+      );
+    }
+
     if (response) {
       return Response.json({
         success: true,
