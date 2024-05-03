@@ -28,6 +28,7 @@ export async function PUT(req) {
             postCode: data.postCode,
             city: data.city,
             country: data.country,
+            IsAdmin: data.IsAdmin,
           },
         },
         { new: true }
@@ -43,6 +44,7 @@ export async function PUT(req) {
             postCode: data.postCode,
             city: data.city,
             country: data.country,
+            IsAdmin: data.IsAdmin,
           },
         },
         { new: true }

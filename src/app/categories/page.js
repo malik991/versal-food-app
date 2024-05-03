@@ -6,7 +6,7 @@ import { useProfile } from "@/components/MyHooks/UseProfile";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { AddIcon, EditIcon, Trash } from "@/components/icons/Right";
+import { AddIcon, EditIcon } from "@/components/icons/Right";
 import DeleteButton from "@/components/layout/DeleteButton";
 
 export default function CategoriesPage() {

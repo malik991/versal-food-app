@@ -1,6 +1,7 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EditableImage from "@/components/layout/EditableImage";
+import { useProfile } from "../MyHooks/UseProfile";
 
 export default function UserForm({ user, onSave, userIdIfExist }) {
   const [userName, setUsername] = useState(user?.name || "");
@@ -10,7 +11,8 @@ export default function UserForm({ user, onSave, userIdIfExist }) {
   const [postCode, setPostCode] = useState(user?.postCode || "");
   const [city, setCity] = useState(user?.city || "");
   const [country, setCountry] = useState(user?.country || "");
-
+  const [IsAdmin, setAdmin] = useState(user?.IsAdmin || false);
+  const { data: loggedInUser } = useProfile();
   return (
     <div
       className="grid items-start gap-3"
@@ -35,6 +37,7 @@ export default function UserForm({ user, onSave, userIdIfExist }) {
             postCode,
             city,
             country,
+            IsAdmin,
           })
         }
       >
@@ -93,6 +96,25 @@ export default function UserForm({ user, onSave, userIdIfExist }) {
           onChange={(e) => setCountry(e.target.value)}
           placeholder="Country"
         />
+        {loggedInUser.IsAdmin && (
+          <div>
+            {/* {JSON.stringify(IsAdmin)} */}
+            <label
+              htmlFor="adminCB"
+              className="p-1 inline-flex items-center gap-2 my-3"
+            >
+              <input
+                id="adminCB"
+                type="checkbox"
+                value={"1"}
+                checked={IsAdmin}
+                onClick={(e) => setAdmin(e.target.checked)}
+              />
+              <span>Admin</span>
+            </label>
+          </div>
+        )}
+
         <button type="submit">Save</button>
       </form>
     </div>
