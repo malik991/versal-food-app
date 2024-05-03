@@ -16,7 +16,6 @@ export async function PUT(req) {
     const session = await getServerSession(authOptions);
     const email = session.user?.email;
     let response;
-    console.log("Id is: ", id);
     if (id) {
       response = await UserModel.findOneAndUpdate(
         { _id: id },

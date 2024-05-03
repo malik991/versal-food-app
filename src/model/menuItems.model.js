@@ -21,6 +21,9 @@ const MenuSchema = new mongoose.Schema(
     image: {
       type: String,
     },
+    public_id: {
+      type: String,
+    },
     basePrice: {
       type: Number,
       required: [true, "price is mendatory"],

@@ -7,6 +7,7 @@ export default function EditableImage({
   insertIntoDb,
   setLink,
   userIDforAvatar,
+  setPublicId,
 }) {
   async function handleImageFile(ev) {
     const getFiles = ev.target.files;
@@ -14,6 +15,7 @@ export default function EditableImage({
       const data = new FormData();
       data.set("file", getFiles[0]);
       if (userIDforAvatar) {
+        console.log(userIDforAvatar);
         data.set("_id", userIDforAvatar);
       }
       let response;
@@ -36,10 +38,10 @@ export default function EditableImage({
         {
           loading: "Image Up-Loading ...",
           success: (res) => {
-            console.log("res: ", res);
             if (res.data.success === true) {
               if (!insertIntoDb) {
                 setLink(res.data?.data?.image);
+                setPublicId(res.data?.data?.public_id);
               }
               return "Uploaded!, please Refresh";
             } else {

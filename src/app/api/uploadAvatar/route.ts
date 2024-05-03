@@ -18,8 +18,6 @@ export const POST = async (req: NextRequest) => {
     let imageExist: any;
     let response: any;
     if (_id) {
-      console.log("enter for Id");
-
       imageExist = await UserModel.findOne({ _id });
     } else {
       imageExist = await UserModel.findOne({ email });

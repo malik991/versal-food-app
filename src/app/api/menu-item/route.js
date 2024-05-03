@@ -2,6 +2,7 @@ import myDbConnection from "@/lib/myDbConnection";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import MenuModel from "@/model/menuItems.model";
+import { DeleteCloudinaryImage } from "@/lib/uploadCloudinary";
 
 export async function POST(req) {
   try {
@@ -17,7 +18,6 @@ export async function POST(req) {
       });
     }
     if (session?.user?.email) {
-      console.log(data);
       const response = await MenuModel.create(data);
       if (response) {
         return Response.json({
@@ -117,6 +117,8 @@ export async function DELETE(req) {
       });
     }
     await myDbConnection();
+    const imageExist = await MenuModel.findById(_id);
+
     const result = await MenuModel.findOneAndDelete({ _id });
     if (!result) {
       return Response.json({
@@ -125,6 +127,23 @@ export async function DELETE(req) {
         data: {},
       });
     }
+    if (imageExist?.public_id) {
+      console.log("yes present: ", imageExist?.public_id);
+      const deleteImageResponse = await DeleteCloudinaryImage([
+        imageExist.public_id,
+      ]);
+      if (!deleteImageResponse) {
+        return NextResponse.json(
+          {
+            success: false,
+            data: {},
+            message: "cloudinary delete image failed",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     return Response.json({
       success: true,
       message: "Deleted item successfully",

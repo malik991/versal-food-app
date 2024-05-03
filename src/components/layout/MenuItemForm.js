@@ -13,6 +13,8 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
   const [category, setCategory] = useState(menuItem?.category || "");
   const [allCategories, setAllCategories] = useState([]);
   const [isCategorySelected, setIsCategorySelected] = useState(false);
+  const [menuId] = useState(menuItem?._id || "");
+  const [public_id, setCloudinaryId] = useState(menuItem?.public_id || "");
   const [extraIngredients, setExtraIngredients] = useState(
     menuItem?.extraIngredients || []
   );
@@ -37,7 +39,21 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
       style={{ gridTemplateColumns: ".3fr .7fr" }}
     >
       <div className="p-2 rounded-lg relative max-w-[120px]">
-        <EditableImage link={image} insertIntoDb={false} setLink={setImage} />
+        {menuId ? (
+          <EditableImage
+            link={image}
+            insertIntoDb={false}
+            setLink={setImage}
+            userIDforAvatar={menuId}
+          />
+        ) : (
+          <EditableImage
+            link={image}
+            insertIntoDb={false}
+            setLink={setImage}
+            setPublicId={setCloudinaryId}
+          />
+        )}
       </div>
       <form
         onSubmit={(ev) =>
@@ -49,6 +65,7 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
             sizes,
             extraIngredients,
             category,
+            public_id,
           })
         }
       >
