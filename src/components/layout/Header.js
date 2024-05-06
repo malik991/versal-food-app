@@ -3,6 +3,7 @@ import { CartContext } from "@/app/context/authProvide";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useContext } from "react";
+import { CartIcon } from "@/components/icons/Right";
 export default function Header() {
   const session = useSession();
   const userData = session?.data?.user;
@@ -59,7 +60,15 @@ export default function Header() {
           </>
         )}
 
-        <Link href={"/cart"}>Cart ({cartProducts.length})</Link>
+        <Link href={"/cart"} className="relative">
+          <CartIcon />
+          <span
+            className="absolute text-xs -top-3 -right-4
+           bg-primary text-white py-1 px-1 rounded-full leading-3"
+          >
+            {cartProducts.length}
+          </span>
+        </Link>
       </nav>
     </header>
   );

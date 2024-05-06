@@ -11,12 +11,14 @@ export default function MenuItem(propProduct) {
   const [selectedExtras, setSelectedExtras] = useState([]);
   const { addToCart } = useContext(CartContext);
   function handleAddToCart() {
-    if (sizes.length === 0 && extraIngredients.length === 0) {
-      addToCart(propProduct, sizes, extraIngredients);
-      toast.success("item add to cart");
-    } else {
+    const hasOptions = sizes?.length > 0 || extraIngredients?.length > 0;
+    if (hasOptions && !showPopup) {
       setShowPopup(true);
+      return;
     }
+    addToCart(propProduct, selectSize, selectedExtras);
+    setShowPopup(false);
+    toast.success("item add to cart");
   }
   function handleExtraIngrediens(e, extraThing) {
     const checked = e.target.checked;
@@ -108,7 +110,11 @@ export default function MenuItem(propProduct) {
                   ))}
                 </div>
               )}
-              <button className="bg-primary my-2 sticky bottom-2" type="button">
+              <button
+                onClick={handleAddToCart}
+                className="bg-primary my-2 sticky bottom-2"
+                type="button"
+              >
                 <span className="text-white">
                   {" "}
                   Add to Cart ${selectedPrice}
