@@ -1,6 +1,8 @@
 "use client";
+import { CartContext } from "@/app/context/authProvide";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
+import { useContext } from "react";
 export default function Header() {
   const session = useSession();
   const userData = session?.data?.user;
@@ -8,6 +10,7 @@ export default function Header() {
   if (userName && userName.includes(" ")) {
     userName = userName.split(" ")[0];
   }
+  const { cartProducts } = useContext(CartContext);
   return (
     <header className="flex items-center justify-between">
       <nav className="flex items-center gap-5 text-gray-500 font-semibold">
@@ -55,6 +58,8 @@ export default function Header() {
             </Link>
           </>
         )}
+
+        <Link href={"/cart"}>Cart ({cartProducts.length})</Link>
       </nav>
     </header>
   );

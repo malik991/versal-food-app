@@ -31,7 +31,7 @@ export default function Menu() {
     <section className="mt-8">
       {categories.length > 0 &&
         categories.map((c) => (
-          <div>
+          <div key={c._id}>
             <div className="text-center">
               <SectionHeaders header={c.name} />
             </div>
@@ -39,7 +39,9 @@ export default function Menu() {
               {menuItems?.length > 0 &&
                 menuItems
                   .filter((item) => item.category === c._id)
-                  .map((groupOfItem) => <MenuItem {...groupOfItem} />)}
+                  .map((groupOfItem) => (
+                    <MenuItem key={groupOfItem._id} {...groupOfItem} />
+                  ))}
             </div>
           </div>
         ))}
