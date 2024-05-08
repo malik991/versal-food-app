@@ -44,3 +44,7 @@ div.tabs > * {
 div.tabs > *.active{
     @apply bg-primary text-white;
 }
+
+.flying-button button{
+    @apply border-primary bg-primary text-white hover:bg-secondry rounded-full;
+}

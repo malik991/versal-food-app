@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import MenuItemTile from "@/components/menu/menuItemTile";
 import Image from "next/image";
+import FlyingButton from "react-flying-item";
 export default function MenuItem(propProduct) {
   const { name, basePrice, description, image, sizes, extraIngredients } =
     propProduct;
@@ -10,15 +11,26 @@ export default function MenuItem(propProduct) {
   const [selectSize, setSelectedSize] = useState(sizes?.[0] || null);
   const [selectedExtras, setSelectedExtras] = useState([]);
   const { addToCart } = useContext(CartContext);
-  function handleAddToCart() {
+  async function handleAddToCart() {
+    console.log("start");
     const hasOptions = sizes?.length > 0 || extraIngredients?.length > 0;
+    console.log(hasOptions);
     if (hasOptions && !showPopup) {
       setShowPopup(true);
       return;
     }
     addToCart(propProduct, selectSize, selectedExtras);
-    setShowPopup(false);
-    toast.success("item add to cart");
+    setSelectedExtras([]);
+    setSelectedSize(sizes?.[0] || null);
+    if (hasOptions) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      console.log("hiding popup");
+      setShowPopup(false);
+    }
+
+    toast.success("Item Added", {
+      position: "top-right",
+    });
   }
   function handleExtraIngrediens(e, extraThing) {
     const checked = e.target.checked;
@@ -110,20 +122,24 @@ export default function MenuItem(propProduct) {
                   ))}
                 </div>
               )}
-              <button
+
+              <div
+                className="bg-primary sticky bottom-2 rounded-full mb-2"
                 onClick={handleAddToCart}
-                className="bg-primary my-2 sticky bottom-2"
-                type="button"
               >
-                <span className="text-white">
-                  {" "}
-                  Add to Cart ${selectedPrice}
-                </span>
-              </button>
+                <FlyingButton src={image} targetTop="5%" targetLeft="95%">
+                  <span className="text-white">
+                    Add to Cart ${selectedPrice}
+                  </span>
+                </FlyingButton>
+              </div>
+
               <button
                 type="button"
                 onClick={() => {
                   setShowPopup(false);
+                  setSelectedExtras([]);
+                  setSelectedSize(sizes?.[0] || null);
                 }}
               >
                 Close

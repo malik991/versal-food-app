@@ -1,3 +1,5 @@
+import AddToCartButton from "@/components/menu/AddToCartButton";
+
 export default function MenuItemTile({ tileProps, onClickToHandle }) {
   const { name, basePrice, description, image, sizes, extraIngredients } =
     tileProps;
@@ -23,17 +25,12 @@ export default function MenuItemTile({ tileProps, onClickToHandle }) {
           : `It is a long established fact that a reader will be distracted by the
         readable content of a page when looking at its layout`}
       </p>
-      <button
-        type="button"
+      <AddToCartButton
+        basePrice={basePrice}
         onClick={onClickToHandle}
-        className="bg-primary mt-2 text-white rounded-full px-8 py-2 hover:bg-gray-300 hover:text-black"
-      >
-        {hasExtraOrSize ? (
-          <span>add to Cart (From ${basePrice})</span>
-        ) : (
-          <span> add to Cart ${basePrice}</span>
-        )}
-      </button>
+        hasExtraOrSize={hasExtraOrSize}
+        image={image}
+      />
     </div>
   );
 }
