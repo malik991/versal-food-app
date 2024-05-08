@@ -1,6 +1,7 @@
 export default function MenuItemTile({ tileProps, onClickToHandle }) {
   const { name, basePrice, description, image, sizes, extraIngredients } =
     tileProps;
+  const hasExtraOrSize = sizes?.length > 0 || extraIngredients?.length > 0;
   return (
     <div
       className="bg-gray-200 rounded-lg p-3 text-center
@@ -27,7 +28,7 @@ export default function MenuItemTile({ tileProps, onClickToHandle }) {
         onClick={onClickToHandle}
         className="bg-primary mt-2 text-white rounded-full px-8 py-2 hover:bg-gray-300 hover:text-black"
       >
-        {sizes?.length > 0 || extraIngredients?.length > 0 ? (
+        {hasExtraOrSize ? (
           <span>add to Cart (From ${basePrice})</span>
         ) : (
           <span> add to Cart ${basePrice}</span>
