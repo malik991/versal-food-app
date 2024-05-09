@@ -12,9 +12,7 @@ export default function MenuItem(propProduct) {
   const [selectedExtras, setSelectedExtras] = useState([]);
   const { addToCart } = useContext(CartContext);
   async function handleAddToCart() {
-    console.log("start");
     const hasOptions = sizes?.length > 0 || extraIngredients?.length > 0;
-    console.log(hasOptions);
     if (hasOptions && !showPopup) {
       setShowPopup(true);
       return;

@@ -7,11 +7,13 @@ import { Trash } from "@/components/icons/Right";
 import { cartProductPrice } from "../context/authProvide";
 import AddressInput from "@/components/layout/addressInput";
 import { useProfile } from "@/components/MyHooks/UseProfile";
+import axios from "axios";
 
 export default function CartPage() {
   const { cartProducts, removeProduct } = useContext(CartContext);
   const [address, setAddress] = useState({});
   const { data: profileData } = useProfile();
+  let subTotal = 0;
 
   useEffect(() => {
     if (profileData?.city) {
@@ -25,10 +27,27 @@ export default function CartPage() {
     setAddress((prevAddress) => ({ ...prevAddress, [propName]: value }));
   }
 
+  async function handleToProceedCheckout(ev) {
+    //get address and cartproduct
+    ev.preventDefault();
+    // call api
+    const data = { address, cartProducts };
+    const response = await axios.post("/api/checkout", data);
+    //console.log(response);
+    if (response) {
+      console.log("res data", response?.data);
+      console.log("res", response);
+      // const link = response.data.link;
+      // window.location = link;
+    }
+    // redirect to stripe
+  }
+
   const calculateTotalPrice = () => {
-    return cartProducts.reduce((total, product) => {
+    subTotal = cartProducts.reduce((total, product) => {
       return total + cartProductPrice(product);
     }, 0);
+    return subTotal;
   };
 
   return (
@@ -90,17 +109,30 @@ export default function CartPage() {
               ${calculateTotalPrice().toFixed(2)}
             </span>
           </div>
+          <div
+            className="text-right text-gray-500 "
+            style={{ paddingRight: "4.7rem" }}
+          >
+            Delivery:{" "}
+            <span className="font-semibold text-lg text-gray-800 pl-2">$5</span>
+          </div>
+          <div className="text-right mr-10 text-gray-500 mt-2">
+            Total:{" "}
+            <span className="font-semibold text-lg text-gray-800 pl-2">
+              ${(subTotal + 5).toFixed(2)}
+            </span>
+          </div>
         </div>
         <div className="my-4 bg-gray-100 rounded-lg p-4">
           <span className="text-center mb-3 font-semibold text-primary">
             <h3>CheckOut</h3>
           </span>
-          <form>
+          <form onSubmit={handleToProceedCheckout}>
             <AddressInput
               addressProps={address}
               setAddressProp={handleChangeAddress}
             />
-            <button type="submit">save</button>
+            <button type="submit">Pay ${subTotal + 5}</button>
           </form>
         </div>
       </div>
