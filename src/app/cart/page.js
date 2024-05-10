@@ -94,6 +94,15 @@ export default function CartPage() {
     return subTotal;
   };
 
+  if (cartProducts?.length === 0) {
+    return (
+      <section className="mt-8 text-center">
+        <SectionHeaders header={"Cart"} />
+        <p className="mt-4"> Oops! your shopping cart is empty 🙄</p>
+      </section>
+    );
+  }
+
   return (
     <section className="mt-8">
       <div className="text-center">
