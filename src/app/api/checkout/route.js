@@ -9,7 +9,7 @@ export async function POST(req) {
   try {
     await myDbConnection();
     const session = await getServerSession(authOptions);
-    const userEmail = session.user?.email;
+    const userEmail = session?.user?.email;
     const orderDoc = await Order.create({
       userEmail,
       ...address,
