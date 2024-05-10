@@ -8,12 +8,21 @@ import { cartProductPrice } from "../context/authProvide";
 import AddressInput from "@/components/layout/addressInput";
 import { useProfile } from "@/components/MyHooks/UseProfile";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export default function CartPage() {
   const { cartProducts, removeProduct } = useContext(CartContext);
   const [address, setAddress] = useState({});
   const { data: profileData } = useProfile();
   let subTotal = 0;
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (window.location?.href?.includes("canceled=1")) {
+        toast.error("payment failed 😞");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (profileData?.city) {
@@ -32,14 +41,49 @@ export default function CartPage() {
     ev.preventDefault();
     // call api
     const data = { address, cartProducts };
-    const response = await axios.post("/api/checkout", data);
-    //console.log(response);
-    if (response) {
-      console.log("res data", response?.data);
-      console.log("res", response);
-      // const link = response.data.link;
-      // window.location = link;
-    }
+    const result = axios.post("/api/checkout", data);
+    toast.promise(
+      result,
+      {
+        loading: "please wait ...",
+        success: (res) => {
+          if (res?.data?.success === true) {
+            const link = res.data?.link;
+            window.location = link;
+            return "Redirect to Payment Method";
+          } else {
+            throw new Error(res?.data?.message);
+          }
+        },
+        error: (err) => {
+          if (
+            err.response &&
+            err.response.data &&
+            !err.response?.data?.message
+          ) {
+            return `Error: ${err.response.data.message}`;
+          } else if (err.message) {
+            return `please try again, ${err.message}`;
+          } else {
+            return "An error occurred while redirect to payment.";
+          }
+        },
+      },
+      {
+        style: {
+          minWidth: "250px",
+          border: "1px solid #713200",
+          padding: "16px",
+          color: "#713200",
+          position: "top-right",
+        },
+        success: {
+          duration: 5000,
+          icon: "🔥",
+        },
+      }
+    );
+
     // redirect to stripe
   }
 
