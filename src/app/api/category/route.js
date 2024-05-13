@@ -1,5 +1,6 @@
 import myDbConnection from "@/lib/myDbConnection";
 import { Category } from "@/model/categories.model";
+import { isAdmin } from "../auth/[...nextauth]/route";
 
 export async function POST(req) {
   const { name } = await req.json();
@@ -12,12 +13,19 @@ export async function POST(req) {
   }
   try {
     await myDbConnection();
-    const result = await Category.create({ name });
-    if (result) {
+    if (await isAdmin()) {
+      const result = await Category.create({ name });
+      if (result) {
+        return Response.json({
+          success: true,
+          message: "category added successfuly",
+          data: result,
+        });
+      }
+    } else {
       return Response.json({
-        success: true,
-        message: "category added successfuly",
-        data: result,
+        suceess: false,
+        message: "you are not authorized",
       });
     }
   } catch (error) {
@@ -44,21 +52,28 @@ export async function PUT(req) {
     return Response.json({ success: false, error: "Invalid data format" });
   }
   try {
-    const result = await Category.findByIdAndUpdate(
-      { _id: data?._id },
-      {
-        $set: {
-          name: data?.name,
+    if (await isAdmin()) {
+      const result = await Category.findByIdAndUpdate(
+        { _id: data?._id },
+        {
+          $set: {
+            name: data?.name,
+          },
         },
-      },
-      {
-        new: true,
+        {
+          new: true,
+        }
+      );
+      if (!result) {
+        return Response.json({ success: false, error: "Category not found" });
       }
-    );
-    if (!result) {
-      return Response.json({ success: false, error: "Category not found" });
+      return Response.json({ success: true, data: result });
+    } else {
+      return Response.json({
+        suceess: false,
+        message: "you are not authorized",
+      });
     }
-    return Response.json({ success: true, data: result });
   } catch (error) {
     console.log("error in update category name api: ", error.message);
     return Response.json({

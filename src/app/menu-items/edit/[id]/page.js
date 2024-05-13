@@ -23,6 +23,7 @@ export default function EditMenuItemPage() {
     axios.get("/api/menu-item").then((items) => {
       const item = items.data?.data?.find((i) => i._id === id);
       if (item) {
+        // console.log(item);
         setMenuItems(item);
       }
     });

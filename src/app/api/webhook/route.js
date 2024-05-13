@@ -14,10 +14,11 @@ export async function POST(req) {
     const reqBuffer = await req.text();
     event = stripe.webhooks.constructEvent(reqBuffer, sig, endpointSecret);
     if (event.type === "checkout.session.completed") {
-      //console.log(event);
+      // console.log(event);
       const orderId = event?.data?.object?.metadata?.orderId;
       const isPaymentDone = event?.data?.object?.payment_status === "paid";
       if (isPaymentDone) {
+        // console.log("ispayment:----------- ", isPaymentDone);
         await Order.updateOne({ _id: orderId }, { paid: true });
       }
       //console.log("ordrid: ", orderId);
@@ -33,5 +34,4 @@ export async function POST(req) {
       { status: 400 }
     );
   }
-  //console.log("event shape: ", event);
 }
