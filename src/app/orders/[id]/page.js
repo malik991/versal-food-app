@@ -21,8 +21,6 @@ export default function OrderPage() {
     if (typeof window !== "undefined") {
       if (window.location.href.includes("clear-cart=1")) {
         clearCart();
-        // const getOrderId = window.location.href.split("/orders/")[1];
-        // const chkOrderId = getOrderId?.split("?")[0];
       }
     }
     if (id) {
@@ -76,7 +74,7 @@ export default function OrderPage() {
         </div>
       )}
       {getOrder?.cartProducts?.length > 0 && (
-        <div className=" max-w-2xl mx-auto grid md:grid-cols-2 gap-4 mt-6">
+        <div className=" max-w-2xl mx-auto grid sm:grid-cols-2 gap-4 mt-6">
           <div className="my-4">
             <div className="pt-3">
               <h1 className="text-primary text-xl font-semibold text-center">

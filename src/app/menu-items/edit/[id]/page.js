@@ -149,7 +149,7 @@ export default function EditMenuItemPage() {
       <div className="max-w-md mx-auto mt-8">
         <MenuItemForm onSubmit={handleItemSubmit} menuItem={menuItems} />
         <div
-          className="grid items-start gap-2 mt-2"
+          className="block sm:grid sm:grid-col-2 items-start gap-2 mt-2"
           style={{ gridTemplateColumns: ".3fr .7fr" }}
         >
           <div></div>

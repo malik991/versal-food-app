@@ -79,7 +79,7 @@ export default function EditableImage({
       )}
       {!link && (
         <div className="bg-gray-200 p-4 text-gray-500 mb-1 rounded-lg">
-          no image
+          upload image
         </div>
       )}
       <label>

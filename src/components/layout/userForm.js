@@ -24,7 +24,7 @@ export default function UserForm({ user, onSave, userIdIfExist }) {
   }
   return (
     <div
-      className="grid items-start gap-3"
+      className="block sm:grid sm:grid-cols-2 items-start gap-3"
       style={{ gridTemplateColumns: ".3fr .7fr" }}
     >
       <div>
@@ -34,61 +34,62 @@ export default function UserForm({ user, onSave, userIdIfExist }) {
           userIDforAvatar={userIdIfExist}
         />
       </div>
+      <div>
+        <form
+          className="grow"
+          onSubmit={(ev) =>
+            onSave(ev, {
+              name: userName,
+              userImage,
+              mobile,
+              Street,
+              postCode,
+              city,
+              country,
+              IsAdmin,
+            })
+          }
+        >
+          <label>Full Name</label>
+          <input
+            type="text"
+            value={userName}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="first and last name"
+          />
+          <label>Email</label>
+          <input
+            type="email"
+            disabled={true}
+            value={user?.email}
+            placeholder="first and last name"
+          />
+          <AddressInput
+            addressProps={{ mobile, Street, postCode, city, country }}
+            setAddressProp={handleAddressChange}
+          />
+          {loggedInUser.IsAdmin && (
+            <div>
+              {/* {JSON.stringify(IsAdmin)} */}
+              <label
+                htmlFor="adminCB"
+                className="p-1 inline-flex items-center gap-2 my-3"
+              >
+                <input
+                  id="adminCB"
+                  type="checkbox"
+                  value={"1"}
+                  checked={IsAdmin}
+                  onClick={(e) => setAdmin(e.target.checked)}
+                />
+                <span>Admin</span>
+              </label>
+            </div>
+          )}
 
-      <form
-        className="grow"
-        onSubmit={(ev) =>
-          onSave(ev, {
-            name: userName,
-            userImage,
-            mobile,
-            Street,
-            postCode,
-            city,
-            country,
-            IsAdmin,
-          })
-        }
-      >
-        <label>Full Name</label>
-        <input
-          type="text"
-          value={userName}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="first and last name"
-        />
-        <label>Email</label>
-        <input
-          type="email"
-          disabled={true}
-          value={user?.email}
-          placeholder="first and last name"
-        />
-        <AddressInput
-          addressProps={{ mobile, Street, postCode, city, country }}
-          setAddressProp={handleAddressChange}
-        />
-        {loggedInUser.IsAdmin && (
-          <div>
-            {/* {JSON.stringify(IsAdmin)} */}
-            <label
-              htmlFor="adminCB"
-              className="p-1 inline-flex items-center gap-2 my-3"
-            >
-              <input
-                id="adminCB"
-                type="checkbox"
-                value={"1"}
-                checked={IsAdmin}
-                onClick={(e) => setAdmin(e.target.checked)}
-              />
-              <span>Admin</span>
-            </label>
-          </div>
-        )}
-
-        <button type="submit">Save</button>
-      </form>
+          <button type="submit">Save</button>
+        </form>
+      </div>
     </div>
   );
 }

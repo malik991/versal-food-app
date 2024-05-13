@@ -30,18 +30,22 @@ export default function Users() {
         <div className="mt-8">
           {users?.length > 0 &&
             users.map((user) => (
-              <div className="bg-gray-200 items-center rounded-md mb-2 p-2 flex gap-1">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 grow">
-                  {user?.name?.includes(" ")
-                    ? (user.name = user.name.split(" ")[0])
-                    : null}
-                  {!!user?.name && <span>{user.name}</span>}
-                  {!user?.name && (
-                    <span className="italic text-gray-500 font-semibold">
-                      {"No Name"}
-                    </span>
-                  )}
-                  <span>{user.email}</span>
+              <div className="bg-gray-200 items-center rounded-md mb-2 p-2 flex gap-3">
+                <div className="grid grid-cols-2 gap-1 grow">
+                  <div>
+                    {user?.name?.includes(" ")
+                      ? (user.name = user.name.split(" ")[0])
+                      : null}
+                    {!!user?.name && <span>{user.name}</span>}
+                    {!user?.name && (
+                      <span className="italic text-gray-500 font-semibold">
+                        {"No Name"}
+                      </span>
+                    )}
+                  </div>
+                  <div>
+                    <span>{user.email}</span>
+                  </div>
                 </div>
                 <div>
                   <Link className="button" href={"/users/" + user._id}>

@@ -35,10 +35,10 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
 
   return (
     <div
-      className="grid items-start gap-2"
+      className="block sm:grid sm:grid-cols-2 sm:items-start gap-2"
       style={{ gridTemplateColumns: ".3fr .7fr" }}
     >
-      <div className="p-2 rounded-lg relative max-w-[120px]">
+      <div>
         {menuId ? (
           <EditableImage
             link={image}
@@ -55,79 +55,81 @@ export default function MenuItemForm({ onSubmit, menuItem }) {
           />
         )}
       </div>
-      <form
-        onSubmit={(ev) =>
-          onSubmit(ev, {
-            name,
-            description,
-            basePrice,
-            image,
-            sizes,
-            extraIngredients,
-            category,
-            public_id,
-          })
-        }
-      >
-        <div className="flex gap-3 items-start">
-          <div className="grow">
-            <label>Item name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={(ev) => setName(ev.target.value)}
-              placeholder="new item name"
-            />
-            <label>Description</label>
-            <input
-              type="text"
-              value={description}
-              onChange={(ev) => setDescription(ev.target.value)}
-              placeholder="Description"
-            />
-            <label>Category</label>
-            <select
-              value={category}
-              onChange={(ev) => {
-                setCategory(ev.target.value);
-                setIsCategorySelected(true);
-              }}
-            >
-              {!isCategorySelected && (
-                <option value="" disabled>
-                  Please select a category
-                </option>
-              )}
-              {allCategories.length > 0 &&
-                allCategories.map((c) => (
-                  <option key={c._id} value={c._id}>
-                    {c.name}
+      <div>
+        <form
+          onSubmit={(ev) =>
+            onSubmit(ev, {
+              name,
+              description,
+              basePrice,
+              image,
+              sizes,
+              extraIngredients,
+              category,
+              public_id,
+            })
+          }
+        >
+          <div className="flex gap-3 items-start">
+            <div className="grow">
+              <label>Item name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(ev) => setName(ev.target.value)}
+                placeholder="new item name"
+              />
+              <label>Description</label>
+              <input
+                type="text"
+                value={description}
+                onChange={(ev) => setDescription(ev.target.value)}
+                placeholder="Description"
+              />
+              <label>Category</label>
+              <select
+                value={category}
+                onChange={(ev) => {
+                  setCategory(ev.target.value);
+                  setIsCategorySelected(true);
+                }}
+              >
+                {!isCategorySelected && (
+                  <option value="" disabled>
+                    Please select a category
                   </option>
-                ))}
-            </select>
-            <label>Base price</label>
-            <input
-              type="text"
-              value={basePrice}
-              onChange={(ev) => setBasePrice(ev.target.value)}
-              placeholder="Base price"
-            />
-            <MenuItemPriceProp
-              heading={"Sizes"}
-              btnLabel={"Add Item Sizes"}
-              sizes={sizes}
-              setSizes={setSizes}
-            />
-            <MenuItemPriceProp
-              heading={"Extra Ingredients"}
-              btnLabel={"Add Ingredients Prices"}
-              sizes={extraIngredients}
-              setSizes={setExtraIngredients}
-            />
-            <button type="submit">{menuItem ? "Update" : "Add"}</button>
+                )}
+                {allCategories.length > 0 &&
+                  allCategories.map((c) => (
+                    <option key={c._id} value={c._id}>
+                      {c.name}
+                    </option>
+                  ))}
+              </select>
+              <label>Base price</label>
+              <input
+                type="text"
+                value={basePrice}
+                onChange={(ev) => setBasePrice(ev.target.value)}
+                placeholder="Base price"
+              />
+              <MenuItemPriceProp
+                heading={"Sizes"}
+                btnLabel={"Add Item Sizes"}
+                sizes={sizes}
+                setSizes={setSizes}
+              />
+              <MenuItemPriceProp
+                heading={"Extra Ingredients"}
+                btnLabel={"Add Ingredients Prices"}
+                sizes={extraIngredients}
+                setSizes={setExtraIngredients}
+              />
+              <button type="submit">{menuItem ? "Update" : "Add"}</button>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

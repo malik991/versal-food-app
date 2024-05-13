@@ -13,65 +13,123 @@ export default function Header() {
   }
   const { cartProducts } = useContext(CartContext);
   return (
-    <header className="flex items-center justify-between">
-      <nav className="flex items-center gap-5 text-gray-500 font-semibold">
-        <Link className="text-primary font-bold" href="">
-          Al-Rehman Pizza
-        </Link>
-
-        <Link href={"/"} className="hover:text-primary">
-          Home
-        </Link>
-        <Link href={"/menu"} className="hover:text-primary">
-          Menu
-        </Link>
-        <Link href={"/#about"} className="hover:text-primary">
-          About
-        </Link>
-        <Link href={"/#contact"} className="hover:text-primary">
-          Contact
-        </Link>
-      </nav>
-      <nav className="flex items-center gap-4 text-gray-500 font-semibold">
-        {session.status === "authenticated" && (
-          <>
-            <Link href={"/profile"} className="whitespace-nowrap">
-              Hello, {userName}
-            </Link>
-            <button
-              onClick={() => signOut()}
-              className="bg-primary px-8 py-2 text-white rounded-full"
-            >
-              Logout
-            </button>
-          </>
-        )}
-        {session.status === "unauthenticated" && (
-          <>
-            <Link href={"/login"} className="hover:text-primary">
-              Login
-            </Link>
-            <Link
-              href={"/register"}
-              className="bg-primary px-8 py-2 text-white rounded-full"
-            >
-              Register
-            </Link>
-          </>
-        )}
-
-        <Link href={"/cart"} className="relative">
-          <CartIcon />
-          {cartProducts.length > 0 && (
-            <span
-              className="absolute text-xs -top-3 -right-3
-           bg-primary text-white py-1 px-2 rounded-full leading-3"
-            >
-              {cartProducts.length}
-            </span>
+    <header className="">
+      <div className="flex items-center justify-between md:hidden">
+        <nav className="flex items-center gap-3 text-gray-400 font-semibold">
+          <Link className="text-primary font-semibold" href="/">
+            Al-Rehman Pizza
+          </Link>
+          <Link href={"/menu"} className="hover:text-primary">
+            Menu
+          </Link>
+          <Link href={"/#about"} className="hover:text-primary">
+            About
+          </Link>
+          <Link href={"/#contact"} className="hover:text-primary">
+            Contact
+          </Link>
+        </nav>
+        <nav className="flex items-center gap-3 text-gray-400 font-semibold">
+          {session.status === "authenticated" && (
+            <>
+              <Link href={"/profile"} className="whitespace-nowrap">
+                Hello, {userName}
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="bg-primary px-5 py-1 text-white rounded-full"
+              >
+                Logout
+              </button>
+            </>
           )}
-        </Link>
-      </nav>
+          {session.status === "unauthenticated" && (
+            <>
+              <Link href={"/login"} className="hover:text-primary">
+                Login
+              </Link>
+              <Link
+                href={"/register"}
+                className="bg-primary px-5 py-1 text-white rounded-full"
+              >
+                Register
+              </Link>
+            </>
+          )}
+
+          <Link href={"/cart"} className="relative">
+            <CartIcon clasName="w-4 h-4" />
+            {cartProducts.length > 0 && (
+              <span
+                className="absolute text-xs -top-3 -right-3
+           bg-primary text-white py-1 px-2 rounded-full leading-3"
+              >
+                {cartProducts.length}
+              </span>
+            )}
+          </Link>
+        </nav>
+      </div>
+      <div className="hidden md:flex items-center justify-between">
+        <nav className="flex items-center gap-5 text-gray-500 font-semibold">
+          <Link className="text-primary font-bold" href="/">
+            Al-Rehman Pizza
+          </Link>
+
+          <Link href={"/"} className="hover:text-primary">
+            Home
+          </Link>
+          <Link href={"/menu"} className="hover:text-primary">
+            Menu
+          </Link>
+          <Link href={"/#about"} className="hover:text-primary">
+            About
+          </Link>
+          <Link href={"/#contact"} className="hover:text-primary">
+            Contact
+          </Link>
+        </nav>
+        <nav className="flex items-center gap-4 text-gray-500 font-semibold">
+          {session.status === "authenticated" && (
+            <>
+              <Link href={"/profile"} className="whitespace-nowrap">
+                Hello, {userName}
+              </Link>
+              <button
+                onClick={() => signOut()}
+                className="bg-primary px-8 py-2 text-white rounded-full"
+              >
+                Logout
+              </button>
+            </>
+          )}
+          {session.status === "unauthenticated" && (
+            <>
+              <Link href={"/login"} className="hover:text-primary">
+                Login
+              </Link>
+              <Link
+                href={"/register"}
+                className="bg-primary px-8 py-2 text-white rounded-full"
+              >
+                Register
+              </Link>
+            </>
+          )}
+
+          <Link href={"/cart"} className="relative">
+            <CartIcon />
+            {cartProducts.length > 0 && (
+              <span
+                className="absolute text-xs -top-3 -right-3
+           bg-primary text-white py-1 px-2 rounded-full leading-3"
+              >
+                {cartProducts.length}
+              </span>
+            )}
+          </Link>
+        </nav>
+      </div>
     </header>
   );
 }
