@@ -77,7 +77,7 @@ export default function LoginPage(req) {
         </button>
       </form>
       <div className="text-center my-4 text-gray-500  pt-4">
-        Do not Have An Account?{" "}
+        Don&apos;t Have An Account?{" "}
         <Link className="underline" href={"/register"}>
           Register here &raquo;
         </Link>

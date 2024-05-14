@@ -2,7 +2,7 @@ import myDbConnection from "@/lib/myDbConnection";
 import { Order } from "@/model/orders.model";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
-import { isAdmin } from "../auth/[...nextauth]/route";
+import { isAdmin } from "../auth/[...nextauth]/checkAdmin";
 
 export async function GET(req) {
   const session = await getServerSession(authOptions);

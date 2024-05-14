@@ -1,6 +1,6 @@
 import myDbConnection from "@/lib/myDbConnection";
 import UserModel from "@/model/user.model";
-import { isAdmin } from "../auth/[...nextauth]/route";
+import { isAdmin } from "../auth/[...nextauth]/checkAdmin";
 
 export async function GET() {
   try {

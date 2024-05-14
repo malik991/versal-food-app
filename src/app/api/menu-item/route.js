@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
 import MenuModel from "@/model/menuItems.model";
 import { DeleteCloudinaryImage } from "@/lib/uploadCloudinary";
-import { isAdmin } from "../auth/[...nextauth]/route";
+import { isAdmin } from "../auth/[...nextauth]/checkAdmin";
 
 export async function POST(req) {
   try {
