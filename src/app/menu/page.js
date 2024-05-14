@@ -28,14 +28,14 @@ export default function Menu() {
       });
   }, []);
   return (
-    <section className="mt-8">
+    <section className="md:mt-8 mt-3">
       {categories.length > 0 &&
         categories.map((c) => (
           <div key={c._id}>
             <div className="text-center">
               <SectionHeaders header={c.name} />
             </div>
-            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-3 mt-8 mb-8">
+            <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-3 my-3 md:my-8">
               {menuItems?.length > 0 &&
                 menuItems
                   .filter((item) => item.category === c._id)
