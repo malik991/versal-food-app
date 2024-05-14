@@ -30,7 +30,10 @@ export default function Users() {
         <div className="mt-8">
           {users?.length > 0 &&
             users.map((user) => (
-              <div className="bg-gray-200 items-center rounded-md mb-2 p-2 flex gap-3">
+              <div
+                key={user._id}
+                className="bg-gray-200 items-center rounded-md mb-2 p-2 flex gap-3"
+              >
                 <div className="grid grid-cols-2 gap-1 grow">
                   <div>
                     {user?.name?.includes(" ")

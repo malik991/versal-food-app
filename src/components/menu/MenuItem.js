@@ -22,7 +22,7 @@ export default function MenuItem(propProduct) {
     setSelectedSize(sizes?.[0] || null);
     if (hasOptions) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("hiding popup");
+      //console.log("hiding popup");
       setShowPopup(false);
     }
 
@@ -107,11 +107,14 @@ export default function MenuItem(propProduct) {
                   {extraIngredients.map((extra) => (
                     <label
                       className="flex items-center gap-2 border rounded-lg mb-1 p-4"
-                      key={extra.name}
+                      key={extra._id}
                     >
                       <input
-                        onClick={(ev) => handleExtraIngrediens(ev, extra)}
+                        onChange={(ev) => handleExtraIngrediens(ev, extra)}
                         type="checkbox"
+                        checked={selectedExtras
+                          .map((e) => e._id)
+                          .includes(extra._id)}
                         name={extra.name}
                       />{" "}
                       {extra.name} +$

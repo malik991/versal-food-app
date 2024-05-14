@@ -39,7 +39,7 @@ export default function CategoriesPage() {
     try {
       const response = await axios.get("/api/menu-item");
       if (response.data.success === true) {
-        console.log(response.data?.data);
+        // console.log(response.data?.data);
         setMenuItems(response.data?.data);
       }
     } catch (error) {
@@ -115,7 +115,6 @@ export default function CategoriesPage() {
 
     const isUsed = meneItems.some((item) => item?.category === idToDelete);
     if (isUsed) {
-      console.log(" idtoDelet: ", idToDelete);
       toast.error("this category is in used of a menue Item");
       return;
     }

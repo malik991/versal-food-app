@@ -45,7 +45,7 @@ export default function MainOrderPage() {
       {loadingOrder && <div className="mt-8">orders loading ...</div>}
       <div className="mt-8">
         {orders?.length > 0 &&
-          orders.map((order, index) => (
+          orders.map((order) => (
             <div
               key={order._id}
               className="bg-gray-100 rounded-lg p-4 mb-2 flex flex-col sm:flex-row items-center gap-6"

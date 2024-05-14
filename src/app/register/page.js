@@ -54,7 +54,13 @@ export default function Register() {
           className="flex gap-4 justify-center"
           onClick={() => signIn("google", { callbackUrl: "/" })}
         >
-          <Image src={"/google.png"} alt={""} width={24} height={24} />
+          <Image
+            src={"/google.png"}
+            alt={"google icon"}
+            width={24}
+            height={24}
+            style={{ width: "24px", height: "24px" }}
+          />
           Login with Google
         </button>
       </form>

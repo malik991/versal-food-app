@@ -17,8 +17,6 @@ export default function MenuItemsPage() {
   const [menuItems, setMenuItems] = useState([]);
 
   useEffect(() => {
-    console.log("use effect");
-
     fetchAllMenu();
   }, []);
 

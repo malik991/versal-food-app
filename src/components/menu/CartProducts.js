@@ -17,7 +17,7 @@ export default function CartProducts({ product, needToRemove, index }) {
         {product.extras?.length > 0 && (
           <div className="text-sm text-gray-500">
             {product.extras.map((extra) => (
-              <div>
+              <div key={extra._id}>
                 <span className="text-gray-500">
                   {extra.name}: ${extra.price},
                 </span>

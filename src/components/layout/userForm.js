@@ -79,8 +79,8 @@ export default function UserForm({ user, onSave, userIdIfExist }) {
                   id="adminCB"
                   type="checkbox"
                   value={"1"}
-                  checked={IsAdmin}
-                  onClick={(e) => setAdmin(e.target.checked)}
+                  defaultChecked={IsAdmin}
+                  onChange={(e) => setAdmin(e.target.checked)}
                 />
                 <span>Admin</span>
               </label>
