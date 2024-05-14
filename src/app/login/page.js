@@ -35,7 +35,7 @@ export default function LoginPage(req) {
       <h1 className="text-center text-primary text-4xl mb-4">Login</h1>
       {error && (
         <div className="my-4 text-red-500 text-md text-center">
-          An Error has occured,
+          An Error has occured
           <br />
           please try again later.
         </div>
@@ -77,7 +77,7 @@ export default function LoginPage(req) {
         </button>
       </form>
       <div className="text-center my-4 text-gray-500  pt-4">
-        Don't Have An Account?{" "}
+        Do not Have An Account?{" "}
         <Link className="underline" href={"/register"}>
           Register here &raquo;
         </Link>

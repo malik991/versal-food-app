@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 import { LeftRoundedArow } from "@/components/icons/Right";
 
-export default function userPage() {
+export default function UserPage() {
   const { loading, data } = useProfile();
   const [userData, setUserData] = useState(null);
   const { id } = useParams();
