@@ -28,6 +28,11 @@ export async function GET(req) {
         data: await Order.find({ userEmail }),
       });
     }
+
+    return Response.json({
+      success: false,
+      message: "please login to see your orders",
+    });
   } catch (error) {
     console.log("error in order api: ", error);
     throw error;

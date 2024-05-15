@@ -9,7 +9,6 @@ import clientPromise from "@/lib/mongoConnect";
 import { Adapter } from "next-auth/adapters";
 
 export const authOptions: NextAuthOptions = {
-  secret: process.env.NEXTAUTH_SECRET,
   adapter: MongoDBAdapter(clientPromise) as Adapter,
   providers: [
     CredentialsProvider({
@@ -56,4 +55,9 @@ export const authOptions: NextAuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 1 * 24 * 60 * 60, // 1 hour
+  },
+  secret: process.env.NEXTAUTH_SECRET,
 };
