@@ -3,12 +3,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function LoginPage(req) {
   const [isLoginUser, setIsLoginUser] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
+  const session = useSession();
+  const { status } = session;
+  if (status === "loading") {
+    return "Loading ...";
+  }
+  if (status === "authenticated") {
+    return redirect("/");
+  }
   const handleLogin = async (ev) => {
     ev.preventDefault();
     if (!email || !password) {

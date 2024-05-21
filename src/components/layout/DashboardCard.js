@@ -12,7 +12,7 @@ export default function DashboardCard({
         <Icon className="w-4 h-4" />
       </section>
       <section className="flex flex-col gap-1">
-        <h2 className="text-2xl font-semibold">{amount}</h2>
+        <h2 className="text-2xl font-semibold text-primary">{amount}</h2>
         <p className="text-sm">{description}</p>
       </section>
     </div>

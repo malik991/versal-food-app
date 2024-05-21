@@ -9,7 +9,8 @@ const CustomTooltip = ({ active, payload, label }) => {
           backgroundColor: "#fff",
           padding: "10px",
           border: "1px solid #ccc",
-          color: "black",
+          color: "#F13A01",
+          borderRadius: "9px",
         }}
       >
         <p className="label">{`Month: ${label}`}</p>

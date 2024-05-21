@@ -61,7 +61,7 @@ const salesData = [
 export default function BarGraph({ userIcon: Icon }) {
   return (
     <div
-      className="bg-slate-500 shadow flex w-full flex-col gap-3 rounded-[5px]
+      className="bg-[#F13A01] shadow flex w-full flex-col gap-3 rounded-[5px]
     p-5 text-slate-100 "
     >
       <section className="flex justify-between gap-2 text-slate-100 pb-2">
@@ -73,6 +73,7 @@ export default function BarGraph({ userIcon: Icon }) {
           data={salesData}
           margin={{ top: 0, left: -15, right: 0, bottom: 0 }}
         >
+          <Tooltip content={<CustomTooltip />} />
           <XAxis
             dataKey={"month"}
             tickLine={false}
@@ -91,10 +92,11 @@ export default function BarGraph({ userIcon: Icon }) {
             tickFormatter={(value) => `$${value}`}
           />
           <Bar
-            type="monotone"
+            radius={[5, 5, 0, 0]}
             stroke="#fff"
+            fill="#F0F3F7"
             width={50}
-            strokeWidth={3}
+            strokeWidth={2}
             dataKey={"total"}
           />
         </BarChart>

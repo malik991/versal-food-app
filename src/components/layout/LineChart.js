@@ -62,10 +62,10 @@ const numberofUsers = [
 export default function LineGraph({ userIcon: Icon }) {
   return (
     <div
-      className="bg-slate-500 shadow flex w-full flex-col gap-3 rounded-[5px]
-    p-5 text-slate-100 "
+      className="bg-gray-100 shadow flex w-full flex-col gap-3 rounded-[5px]
+    p-5 "
     >
-      <section className="flex justify-between gap-2 text-slate-100 pb-2">
+      <section className="flex justify-between gap-2 text-[#F13A01] pb-2">
         <p>User Data</p>
         <Icon className="w-4 h-4" />
       </section>
@@ -78,7 +78,8 @@ export default function LineGraph({ userIcon: Icon }) {
           <Line
             type={"monotone"}
             dataKey={"users"}
-            stroke="#fff"
+            stroke="#F13A01"
+            fill="#fff"
             width={50}
             strokeWidth={3}
           />
@@ -86,7 +87,7 @@ export default function LineGraph({ userIcon: Icon }) {
             dataKey={"month"}
             tickLine={false}
             axisLine={true}
-            stroke="#fff"
+            stroke="#F13A01"
             fontSize={13}
             padding={{ left: 0, right: 0 }}
           />
@@ -94,11 +95,15 @@ export default function LineGraph({ userIcon: Icon }) {
             dataKey={"users"}
             tickLine={false}
             axisLine={true}
-            stroke="#fff"
+            stroke="#F13A01"
             fontSize={13}
             padding={{ top: 0, bottom: 0 }}
           />
-          <CartesianGrid strokeDasharray={"2 2"} className="opacity-50" />
+          <CartesianGrid
+            strokeDasharray={"2 2"}
+            stroke="#000000"
+            className="opacity-50"
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>

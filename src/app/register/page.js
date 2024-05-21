@@ -3,11 +3,22 @@ import Image from "next/image";
 import { useState } from "react";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import { redirect } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isCreatingUser, setIscreatingUser] = useState(false);
+  const session = useSession();
+  const { status } = session;
+  if (status === "loading") {
+    return "Loading ...";
+  }
+  if (status === "authenticated") {
+    return redirect("/");
+  }
+
   const handleRegisterSubmit = async (ev) => {
     if (!email || !password) {
       return alert("email and password is mendatory");
