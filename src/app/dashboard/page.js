@@ -29,9 +29,10 @@ export default function DashboardPage() {
     axios
       .get("/api/dashboard")
       .then((res) => {
-        console.log(res.data?.data);
-        setConciseData(res.data?.data);
-        setDataLoadind(false);
+        if (res.data?.success) {
+          setConciseData(res.data?.data);
+          setDataLoadind(false);
+        }
       })
       .catch((err) => {
         setDataLoadind(false);
@@ -64,7 +65,7 @@ export default function DashboardPage() {
               >
                 <DashboardCard
                   label="Total Revenue"
-                  amount={`$${(conciseDataforDivs?.totalRevenue || "0").toFixed(
+                  amount={`$${(conciseDataforDivs?.totalRevenue ?? 0).toFixed(
                     2
                   )}`}
                   description="Total Revenue generated"
@@ -73,23 +74,23 @@ export default function DashboardPage() {
                 <DashboardCard
                   label="Total Orders"
                   amount={`${
-                    conciseDataforDivs?.totalPaidAndUnpaidOrders || "0"
+                    conciseDataforDivs?.totalPaidAndUnpaidOrders ?? 0
                   }`}
                   description="+11 Orders increase in this month"
                   icon={PersonStandingIcon}
                 />
                 <DashboardCard
                   label="Paid Orders"
-                  amount={`${conciseDataforDivs?.totalPaidOrders || "0"}`}
+                  amount={`${conciseDataforDivs?.totalPaidOrders ?? 0}`}
                   description="total paid order of this month"
                   icon={CreditCardIcon}
                 />
                 <DashboardCard
                   label="Sales"
-                  amount={`+${conciseDataforDivs?.totalPaidOrders}` || "0"}
-                  description={`+${conciseDataforDivs?.totalPaidOrders}
-                   in this month total sold item are ${
-                     conciseDataforDivs?.totalPaidOrders || "0"
+                  amount={`+${conciseDataforDivs?.totalPaidOrders ?? 0}`}
+                  description={`+${conciseDataforDivs?.totalPaidOrders ?? 0}
+                   in this month, total sold items are ${
+                     conciseDataforDivs?.totalPaidOrders ?? 0
                    }`}
                   icon={CircleCheckBig}
                 />

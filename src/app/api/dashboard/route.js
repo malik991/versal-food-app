@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { isAdmin } from "../auth/[...nextauth]/checkAdmin";
 import myDbConnection from "@/lib/myDbConnection";
 import { Order } from "@/model/orders.model";
@@ -6,8 +8,8 @@ export async function GET(req) {
   try {
     let pipeLine = [];
 
-    await myDbConnection();
     if (await isAdmin()) {
+      await myDbConnection();
       pipeLine.push(
         {
           $facet: {
@@ -86,10 +88,7 @@ export async function GET(req) {
         { status: 200 }
       );
     }
-    return Response.json(
-      { success: false, message: "you are not authorised" },
-      { status: 500 }
-    );
+    return Response.json({ success: false, message: "you are not authorised" });
   } catch (error) {
     console.log("error in fetch data for dashboard api: ", error);
     throw error;
