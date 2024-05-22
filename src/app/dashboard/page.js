@@ -23,10 +23,25 @@ export default function DashboardPage() {
   const session = useSession();
   const { status } = session;
   const { loading: profileLoading, data: profileData } = useProfile();
+  const [conciseDataforDivs, setConciseData] = useState({});
+  const [dataLoadind, setDataLoadind] = useState(true);
+  useEffect(() => {
+    axios
+      .get("/api/dashboard")
+      .then((res) => {
+        console.log(res.data?.data);
+        setConciseData(res.data?.data);
+        setDataLoadind(false);
+      })
+      .catch((err) => {
+        setDataLoadind(false);
+        console.log("error on dashboard page: ", err);
+      });
+  }, []);
   if (status === "unauthenticated") {
     return redirect("/login");
   }
-  if (status === "loading") {
+  if (status === "loading" || dataLoadind) {
     return "Loading...";
   }
   if (profileLoading) {
@@ -48,27 +63,34 @@ export default function DashboardPage() {
               sm:grid-cols-2 lg:grid-cols-4"
               >
                 <DashboardCard
-                  label="Revenue"
-                  amount="$2,000.00"
-                  description="Total Revenue generated in this month"
+                  label="Total Revenue"
+                  amount={`$${(conciseDataforDivs?.totalRevenue || "0").toFixed(
+                    2
+                  )}`}
+                  description="Total Revenue generated"
                   icon={LucideDollarSign}
                 />
                 <DashboardCard
-                  label="Customers"
-                  amount="+250"
-                  description="+22 customer increase in this month"
+                  label="Total Orders"
+                  amount={`${
+                    conciseDataforDivs?.totalPaidAndUnpaidOrders || "0"
+                  }`}
+                  description="+11 Orders increase in this month"
                   icon={PersonStandingIcon}
                 />
                 <DashboardCard
-                  label="Profit"
-                  amount="$500.00"
-                  description="Profit of this month on the basis"
+                  label="Paid Orders"
+                  amount={`${conciseDataforDivs?.totalPaidOrders || "0"}`}
+                  description="total paid order of this month"
                   icon={CreditCardIcon}
                 />
                 <DashboardCard
                   label="Sales"
-                  amount="+90"
-                  description="+10 in this month total sold item are 90"
+                  amount={`+${conciseDataforDivs?.totalPaidOrders}` || "0"}
+                  description={`+${conciseDataforDivs?.totalPaidOrders}
+                   in this month total sold item are ${
+                     conciseDataforDivs?.totalPaidOrders || "0"
+                   }`}
                   icon={CircleCheckBig}
                 />
               </section>
