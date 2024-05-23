@@ -1,4 +1,5 @@
 import AddToCartButton from "@/components/menu/AddToCartButton";
+import Image from "next/image";
 
 export default function MenuItemTile({ tileProps, onClickToHandle }) {
   const { name, basePrice, description, image, sizes, extraIngredients } =
@@ -10,10 +11,14 @@ export default function MenuItemTile({ tileProps, onClickToHandle }) {
      hover:bg-white transition-all hover:shadow-md hover:shadow-black/30"
     >
       <div className="text-center">
-        <img
+        <Image
           src={image ? image : "/pizza.png"}
           alt="pizza"
-          className="max-h-auto max-h-24 block mx-auto"
+          width={200}
+          height={200}
+          className="block mx-auto"
+          style={{ width: "auto", height: "auto" }}
+          priority={true}
         />
       </div>
       <h4 className="font-semibold text-xl my-2">

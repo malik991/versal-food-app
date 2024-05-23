@@ -4,7 +4,7 @@ const CustomTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
     return (
       <div
-        className="custom-tooltip"
+        className=""
         style={{
           backgroundColor: "#fff",
           padding: "10px",

@@ -1,19 +1,26 @@
 export default function DateTimeFormate(dateTimeString) {
   // a simple way
   return dateTimeString.replace("T", " ").substring(0, 16);
-
-  //   const date = new Date(dateTimeString);
-
-  //   // Get date portion in dd/mm/yy format
-  //   const formattedDate = `${("0" + date.getDate()).slice(-2)}/${(
-  //     "0" +
-  //     (date.getMonth() + 1)
-  //   ).slice(-2)}/${date.getFullYear().toString().slice(-2)}`;
-
-  //   // Get time portion in 24-hour format
-  //   const formattedTime = `${("0" + date.getHours()).slice(-2)}:${(
-  //     "0" + date.getMinutes()
-  //   ).slice(-2)}:${("0" + date.getSeconds()).slice(-2)}`;
-
-  //   return `${formattedDate}, ${formattedTime}`;
 }
+
+// Generate an array with all days of the current month
+const generateMonthDays = () => {
+  const daysInMonth = new Date().getDate();
+  const month = new Date().toLocaleString("default", { month: "short" });
+  const daysArray = Array.from({ length: daysInMonth }, (_, i) => ({
+    day: `${month}-${i + 1}`,
+    totalPrice: 0, // Initialize with 0 sales
+  }));
+  return daysArray;
+};
+
+export const mergeWithMonthDays = (salesData) => {
+  const monthDays = generateMonthDays();
+  salesData.forEach((sale) => {
+    const dayIndex = monthDays.findIndex((d) => d.day === sale.day);
+    if (dayIndex !== -1) {
+      monthDays[dayIndex].totalPrice = sale.totalPrice;
+    }
+  });
+  return monthDays;
+};

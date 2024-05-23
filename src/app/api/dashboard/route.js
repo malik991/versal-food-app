@@ -7,9 +7,8 @@ import { Order } from "@/model/orders.model";
 export async function GET(req) {
   try {
     let pipeLine = [];
-
+    await myDbConnection();
     if (await isAdmin()) {
-      await myDbConnection();
       pipeLine.push(
         {
           $facet: {

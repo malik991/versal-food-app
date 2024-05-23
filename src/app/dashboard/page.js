@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
@@ -19,6 +20,9 @@ import {
   CandlestickChart,
 } from "lucide-react";
 
+// Configure axios-retry
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
+
 export default function DashboardPage() {
   const session = useSession();
   const { status } = session;
@@ -27,7 +31,7 @@ export default function DashboardPage() {
   const [dataLoadind, setDataLoadind] = useState(true);
   useEffect(() => {
     axios
-      .get("/api/dashboard")
+      .get("/api/dashboard", { timeout: 30000 })
       .then((res) => {
         if (res.data?.success) {
           setConciseData(res.data?.data);
