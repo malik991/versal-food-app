@@ -23,7 +23,7 @@ export default function CategoriesPage() {
     fetchMenuItems();
   }, []);
 
-  function fetchCategories() {
+  async function fetchCategories() {
     axios
       .get("/api/category")
       .then((response) => {

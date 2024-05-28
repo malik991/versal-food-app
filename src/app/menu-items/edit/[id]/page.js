@@ -8,9 +8,10 @@ import { useEffect, useState } from "react";
 import UserTabs from "@/components/layout/UserTabs";
 import Link from "next/link";
 import { LeftRoundedArow } from "@/components/icons/Right";
-import { useParams, useRouter } from "next/navigation";
+import { redirect, useParams, useRouter } from "next/navigation";
 import MenuItemForm from "@/components/layout/MenuItemForm";
 import DeleteButton from "@/components/layout/DeleteButton";
+import { useSession } from "next-auth/react";
 
 export default function EditMenuItemPage() {
   const { id } = useParams();
@@ -18,6 +19,8 @@ export default function EditMenuItemPage() {
   const [menuItems, setMenuItems] = useState(null);
   const [redirectToMainMenu, setRedirectToMaainMenu] = useState(false);
   const route = useRouter();
+  const session = useSession();
+  const { status } = session;
 
   useEffect(() => {
     axios.get("/api/menu-item").then((items) => {
@@ -28,6 +31,10 @@ export default function EditMenuItemPage() {
       }
     });
   }, []);
+
+  if (status === "unauthenticated") {
+    return redirect("/login");
+  }
 
   if (loading) {
     return "Loading User Info...";
@@ -147,19 +154,26 @@ export default function EditMenuItemPage() {
         </Link>
       </div>
       <div className="max-w-md mx-auto mt-8">
-        <MenuItemForm onSubmit={handleItemSubmit} menuItem={menuItems} />
-        <div
-          className="block sm:grid sm:grid-col-2 items-start gap-2 mt-2"
-          style={{ gridTemplateColumns: ".3fr .7fr" }}
-        >
-          <div></div>
-          <div>
-            <DeleteButton btnLabel={"Delete"} onDelete={handleDeleteAction} />
-            {/* <button type="button" onClick={handleDeleteAction}>
+        {menuItems && (
+          <>
+            <MenuItemForm onSubmit={handleItemSubmit} menuItem={menuItems} />
+            <div
+              className="block sm:grid sm:grid-col-2 items-start gap-2 mt-2"
+              style={{ gridTemplateColumns: ".3fr .7fr" }}
+            >
+              <div></div>
+              <div>
+                <DeleteButton
+                  btnLabel={"Delete"}
+                  onDelete={handleDeleteAction}
+                />
+                {/* <button type="button" onClick={handleDeleteAction}>
               Delete
             </button> */}
-          </div>
-        </div>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
